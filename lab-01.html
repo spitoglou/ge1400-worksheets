@@ -27,6 +27,14 @@
   πουθενά από αυτή τη σελίδα. Αν έχετε ήδη ξεκινήσει το PDF σε άλλο πρόγραμμα, το «Συνέχεια από PDF»
   φορτώνει τις απαντήσεις του εδώ.</p>
 
+
+  <p class="companion"><span>Συνοδευτικό υλικό:</span> 
+<span class="materials">
+  <a class="material-link" href="materials/lab-01/Εργαστηριο_01_Ποροι_Συνδεσμοι.pdf" data-label="Πόροι και σύνδεσμοι" target="_blank" rel="noopener">Πόροι και σύνδεσμοι</a>
+  <a class="material-link" href="materials/lab-01/Εργαστηριο_01_Quick_Reference_Card.pdf" data-label="Quick Reference Card" target="_blank" rel="noopener">Quick Reference Card</a>
+  <a class="material-link" href="materials/lab-01/lecture_01_presentation_eclass.pdf" data-label="Διαφάνειες Διάλεξης 1" target="_blank" rel="noopener">Διαφάνειες Διάλεξης 1</a>
+</span></p>
+
   <h1>Εργαστήριο 01: Φύλλο Εργασίας Φοιτητή</h1>
   <form id="worksheet" autocomplete="off" onsubmit="return false">
 <h1 id="εργαστηριο-01---φυλλο-εργασιασ">📝 ΕΡΓΑΣΤΗΡΙΟ 01 - ΦΥΛΛΟ
@@ -238,5 +246,15 @@ Central, Unpaywall) αντί για ιστότοπους πειρατείας;</
 <script src="assets/pdf-lib.min.js"></script>
 <script src="assets/fontkit.umd.min.js"></script>
 <script src="assets/app.js"></script>
+<dialog id="material" aria-labelledby="material-title">
+  <div class="material-bar">
+    <strong class="material-title" id="material-title"></strong>
+    <a class="material-open" href="#" target="_blank" rel="noopener">Άνοιγμα σε νέα καρτέλα</a>
+    <a class="material-save" href="#">Λήψη</a>
+    <button type="button" class="material-close" aria-label="Κλείσιμο">✕</button>
+  </div>
+  <div class="material-viewer" tabindex="0"></div>
+</dialog>
+<script src="assets/materials.js"></script>
 </body>
 </html>

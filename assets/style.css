@@ -63,7 +63,50 @@ ul.contains-task-list, ul.task-list { list-style: none; padding-left: 1.2rem; }
 .ws-box { display: block; width: 100%; resize: vertical; margin: 4px 0 8px; }
 .ws-tick { width: 1.1rem; height: 1.1rem; accent-color: var(--mid); vertical-align: middle; }
 .ws-line:focus, .ws-cell:focus, .ws-box:focus { outline: 2px solid var(--mid); outline-offset: 0; background: #fff; }
-ul.labs li { margin: 6px 0; }
+ul.labs { padding-left: 1.2rem; }
+ul.labs li { margin: 10px 0; }
+ul.labs .lab-title { font-weight: 600; }
+ul.labs .materials { display: flex; margin-top: 4px; }
+
+/* Companion files: small buttons, opened in one window over the page */
+.companion { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 12px 0 0; }
+.companion > span { font-size: 0.92rem; color: var(--grey); }
+.materials { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+a.material-link {
+  font-size: 0.88rem; text-decoration: none; padding: 3px 10px; border-radius: 4px;
+  border: 1px solid var(--mid); color: var(--mid); background: #fff;
+}
+a.material-link:hover, a.material-link:focus-visible { background: var(--mid); color: #fff; }
+dialog#material {
+  width: min(1100px, 96vw); height: 92vh; padding: 0; border: 0; border-radius: 6px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35); overflow: hidden;
+}
+dialog#material[open] { display: flex; flex-direction: column; }
+dialog#material::backdrop { background: rgba(0, 0, 0, 0.55); }
+.material-bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+  padding: 8px 12px; background: var(--dark); color: #fff;
+}
+.material-bar .material-title { flex: 1 1 auto; min-width: 0; }
+.material-bar a { color: #fff; font-size: 0.9rem; }
+.material-close {
+  font: inherit; font-size: 1.1rem; line-height: 1; cursor: pointer;
+  background: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 4px; padding: 4px 9px;
+}
+.material-viewer {
+  flex: 1 1 auto; overflow: auto; background: #525659;
+  padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.material-page { position: relative; flex: none; background: #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); }
+.material-page canvas { display: block; width: 100%; height: 100%; }
+.material-page a { position: absolute; display: block; }
+.material-page a:hover { background: rgba(46, 116, 181, 0.15); outline: 1px solid var(--mid); }
+.material-note { color: #fff; margin: 24px; }
+
+figure.screencast { margin: 1rem 0; }
+figure.screencast video { width: 100%; height: auto; background: #000; border-radius: 4px; }
+figure.screencast figcaption { font-size: 0.9rem; color: var(--grey); margin-top: 6px; }
 
 @media (max-width: 600px) {
   .ws-line { width: 100% !important; display: block; margin: 4px 0; }
