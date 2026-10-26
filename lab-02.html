@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Εργαστήριο 02: Φύλλο Εργασίας Φοιτητή · ΓΕ1400</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <a class="back" href="index.html">ΓΕ1400 · Φύλλα Εργασίας Εργαστηρίου</a>
+</header>
+
+<div class="toolbar" role="toolbar" aria-label="Ενέργειες">
+  <button type="button" id="export" class="primary">Λήψη συμπληρωμένου PDF</button>
+  <label class="button" for="import">Συνέχεια από PDF
+    <input type="file" id="import" accept="application/pdf" hidden>
+  </label>
+  <button type="button" id="clear">Καθαρισμός</button>
+  <span id="status" role="status" aria-live="polite"></span>
+</div>
+
+<main>
+  <p class="howto">Συμπληρώστε τα πεδία, πατήστε <strong>«Λήψη συμπληρωμένου PDF»</strong> και ανεβάστε
+  το αρχείο που κατέβηκε στην εργασία του εργαστηρίου στο e-class. Οι απαντήσεις σας κρατιούνται
+  σε αυτόν τον browser, σε αυτή τη συσκευή, μέχρι να πατήσετε «Καθαρισμός». Τίποτα δεν στέλνεται
+  πουθενά από αυτή τη σελίδα. Αν έχετε ήδη ξεκινήσει το PDF σε άλλο πρόγραμμα, το «Συνέχεια από PDF»
+  φορτώνει τις απαντήσεις του εδώ.</p>
+
+  <h1>Εργαστήριο 02: Φύλλο Εργασίας Φοιτητή</h1>
+  <form id="worksheet" autocomplete="off" onsubmit="return false">
+<h1 id="εργαστηριο-02---φυλλο-εργασιασ">📝 ΕΡΓΑΣΤΗΡΙΟ 02 - ΦΥΛΛΟ
+ΕΡΓΑΣΙΑΣ</h1>
+<p><strong>Ονοματεπώνυμο:</strong>
+<input type="text" class="ws-line" name="f015" style="width:13em" autocomplete="off">
+<strong>ΑΜ:</strong>
+<input type="text" class="ws-line" name="f016" style="width:6em" autocomplete="off">
+<strong>Ημ/νία:</strong>
+<input type="text" class="ws-line" name="f017" style="width:5em" autocomplete="off"></p>
+<blockquote>
+<p>Ταξινομήσεις &amp; κωδικοποίηση: ICD-10/11, SNOMED CT, eNCPT. Αυτό το
+εργαστήριο γίνεται στο <strong>Εργαστήριο Η/Υ</strong>, τη Δευτέρα
+26/10.</p>
+<p><strong>Το φύλλο εργασίας είναι υποχρεωτικό</strong> σε κάθε
+εργαστήριο. Το συμπληρώνετε και το υποβάλλετε <strong>μέσω e-class έως
+την Κυριακή 01/11, 23:55</strong>.</p>
+</blockquote>
+<hr />
+<h2 id="προθερμανση">🔥 ΠΡΟΘΕΡΜΑΝΣΗ</h2>
+<ol type="1">
+<li><p>Γράψτε <strong>δύο</strong> διαφορετικούς τρόπους να πει κανείς
+«παχυσαρκία»:</p>
+<p><input type="text" class="ws-line" name="f018" style="width:15em" autocomplete="off">
+/
+<input type="text" class="ws-line" name="f019" style="width:15em" autocomplete="off"></p></li>
+<li><p>Γιατί χρειάζονται οι υπολογιστές κωδικούς αντί για ελεύθερο
+κείμενο;</p>
+<p><textarea class="ws-box" name="ib005" rows="2"></textarea></p></li>
+</ol>
+<hr />
+<h2 id="browsers---ανοιξτε-τουσ">🔖 BROWSERS - ΑΝΟΙΞΤΕ ΤΟΥΣ</h2>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr>
+<th>Σύστημα</th>
+<th style="text-align: center;">Το άνοιξα ✅</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ICD-10 (WHO)</td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c023"></td>
+</tr>
+<tr>
+<td>ICD-11 (WHO)</td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c024"></td>
+</tr>
+<tr>
+<td>SNOMED CT</td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c025"></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="σημειωσεισ">✍️ ΣΗΜΕΙΩΣΕΙΣ</h2>
+<ul>
+<li>Δομή κωδικού ICD-10:
+<textarea class="ws-box" name="nb006" rows="2"></textarea></li>
+<li>ICD vs SNOMED CT:
+<textarea class="ws-box" name="nb007" rows="2"></textarea></li>
+</ul>
+<hr />
+<h2 id="ασκηση-1---icd-10-browser-βήμα-βήμα">ΑΣΚΗΣΗ 1 - ICD-10 browser ·
+βήμα-βήμα</h2>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t031"> Βρήκα το
+<code>E66.9</code> (παχυσαρκία) στον browser.</li>
+<li><input type="checkbox" class="ws-tick" name="t032"> Βρήκα το
+<code>I10</code> (υπέρταση).</li>
+</ul>
+<p><strong>Ερώτηση:</strong> Σε ποιο κεφάλαιο (γράμμα/εύρος) ανήκει η
+παχυσαρκία;
+<textarea class="ws-box" name="pb008" rows="2"></textarea></p>
+<hr />
+<h2 id="ασκηση-2---κωδικοποίηση-5-καταστάσεων-ατομικά">ΑΣΚΗΣΗ 2 -
+Κωδικοποίηση 5 καταστάσεων · ατομικά</h2>
+<p>Βρείτε μόνοι σας τους κωδικούς ICD-10:</p>
+<table>
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 34%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr>
+<th>Κατάσταση</th>
+<th style="text-align: center;">Ο κωδικός μου</th>
+<th style="text-align: center;">Σωστό ✅</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Παχυσαρκία, μη καθορισμένη</td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc040" rows="2"></textarea></td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c026"></td>
+</tr>
+<tr>
+<td>Ιδιοπαθής υπέρταση</td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc041" rows="2"></textarea></td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c027"></td>
+</tr>
+<tr>
+<td>Σιδηροπενική αναιμία, μη καθορισμένη</td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc042" rows="2"></textarea></td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c028"></td>
+</tr>
+<tr>
+<td>Υπερλιπιδαιμία, μη καθορισμένη</td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc043" rows="2"></textarea></td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c029"></td>
+</tr>
+<tr>
+<td>Κοιλιοκάκη</td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc044" rows="2"></textarea></td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c030"></td>
+</tr>
+</tbody>
+</table>
+<p><strong>❌ ΚΟΙΝΟ ΛΑΘΟΣ:</strong> επιλογή πολύ ειδικού κωδικού.
+Κανόνας: «χωρίς επιπλέον στοιχεία →
+<input type="text" class="ws-line" name="f020" style="width:5em" autocomplete="off">».</p>
+<hr />
+<h2 id="ασκηση-3---icd-11-σύγκριση">ΑΣΚΗΣΗ 3 - ICD-11 σύγκριση</h2>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t033"> Βρήκα την
+«obesity» στον ICD-11 browser.</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 27%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>ICD-10</th>
+<th>ICD-11</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Κωδικός obesity</td>
+<td>E66.9</td>
+<td><textarea class="ws-cell" name="tc045" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Μορφή/δομή</td>
+<td>αλφαριθμητικός</td>
+<td><textarea class="ws-cell" name="tc046" rows="2"></textarea></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ερώτηση κριτικής σκέψης:</strong> Ένα πλεονέκτημα του ICD-11
+έναντι του ICD-10:</p>
+<p><textarea class="ws-box" name="ans002" rows="4"></textarea></p>
+<hr />
+<h2 id="ασκηση-4---snomed-ct-browser">ΑΣΚΗΣΗ 4 - SNOMED CT browser</h2>
+<p>💡 <strong>Την πρώτη φορά:</strong> πατήστε «Go browsing…» στο
+«International Edition», «Accept» στην άδεια χρήσης, και κλείστε το
+μήνυμα για τα cookies. Μετά γράψτε <code>obesity</code> στο «Search» και
+πατήστε το αποτέλεσμα «Obesity (disorder)».</p>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t034"> Άνοιξα το
+concept «obesity».</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 54%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr>
+<th>Πεδίο</th>
+<th>Απάντηση</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FSN (Fully Specified Name)</td>
+<td><textarea class="ws-cell" name="tc047" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Ένα συνώνυμο</td>
+<td><textarea class="ws-cell" name="tc048" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Μία σχέση IS-A</td>
+<td><textarea class="ws-cell" name="tc049" rows="2"></textarea></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ερώτηση:</strong> Γιατί το SNOMED CT θεωρείται «κλινικά
+πλουσιότερο» από το ICD;</p>
+<p><textarea class="ws-box" name="ans003" rows="4"></textarea></p>
+<hr />
+<h2 id="ολοκληρωμενη-ασκηση">🎯 ΟΛΟΚΛΗΡΩΜΕΝΗ ΑΣΚΗΣΗ</h2>
+<p><strong>Σενάριο:</strong> Είστε διαιτολόγος. Ασθενής 55 ετών με
+<strong>παχυσαρκία</strong> &amp; <strong>υπερλιπιδαιμία</strong>
+εισάγεται στο νοσοκομείο.</p>
+<p><strong>α) Κωδικοί ICD-10:</strong></p>
+<ul>
+<li>Παχυσαρκία:
+<input type="text" class="ws-line" name="f021" style="width:5em" autocomplete="off">
+· Υπερλιπιδαιμία:
+<input type="text" class="ws-line" name="f022" style="width:5em" autocomplete="off"></li>
+</ul>
+<p><strong>β) Μία διατροφική διάγνωση (PES):</strong></p>
+<p>💡 <strong>Για τον όρο P:</strong> η πλήρης eNCPT είναι συνδρομητική,
+όμως οι όροι της φαίνονται δωρεάν στο SNOMED CT. Στο <a href="https://browser.snomedtools.org/" class="uri">https://browser.snomedtools.org/</a> επιλέξτε
+<strong>International Derivatives</strong>, «Accept», καρτέλα
+<strong>Refset</strong>, πατήστε το <strong>Nutrition Care Process
+Terminology reference set</strong> και μετά <strong>Members</strong>.
+Εκεί οι όροι έχουν Concept ID του SNOMED CT και όχι κωδικό τύπου
+NI-1.3.</p>
+<ul>
+<li><strong>P (πρόβλημα):</strong>
+<textarea class="ws-box" name="pb009" rows="2"></textarea></li>
+<li><strong>E (αιτία, «σχετιζόμενο με…»):</strong>
+<textarea class="ws-box" name="pb010" rows="2"></textarea></li>
+<li><strong>S (τεκμήρια, «όπως αποδεικνύεται από…»):</strong>
+<textarea class="ws-box" name="pb011" rows="2"></textarea></li>
+</ul>
+<p><strong>γ)</strong> Ποιος επαγγελματίας χρησιμοποιεί ICD και ποιος
+eNCPT;</p>
+<p><textarea class="ws-box" name="ans004" rows="4"></textarea></p>
+<hr />
+<h2 id="αυτοαξιολογηση">✅ ΑΥΤΟΑΞΙΟΛΟΓΗΣΗ</h2>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t035"> Βρίσκω κωδικούς
+στον ICD-10 browser.</li>
+<li><input type="checkbox" class="ws-tick" name="t036"> Εξηγώ τη διαφορά
+ICD / SNOMED CT / eNCPT.</li>
+<li><input type="checkbox" class="ws-tick" name="t037"> Διατυπώνω ένα
+απλό PES statement.</li>
+</ul>
+<hr />
+<h2 id="exit-ticket-συμπληρώστε-το-πριν-από-την-υποβολή">🎟️ EXIT TICKET
+(συμπληρώστε το πριν από την υποβολή)</h2>
+<ol type="1">
+<li><p>Ένας κωδικός που <strong>έμαθα</strong> σήμερα:
+<textarea class="ws-box" name="pb012" rows="2"></textarea></p></li>
+<li><p>Με δικά μου λόγια, <strong>ICD vs SNOMED CT</strong>:
+<textarea class="ws-box" name="pb013" rows="2"></textarea></p></li>
+<li><p>Μία απορία:
+<textarea class="ws-box" name="pb014" rows="2"></textarea></p></li>
+</ol>
+<hr />
+<h2 id="προετοιμασια-για-διαλεξη-3">📅 ΠΡΟΕΤΟΙΜΑΣΙΑ ΓΙΑ ΔΙΑΛΕΞΗ 3</h2>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t038"> Μελετήστε τις
+σημειώσεις της Διάλεξης 2 (e-class).</li>
+<li><input type="checkbox" class="ws-tick" name="t039"> Σκεφτείτε: πώς
+θα <strong>συλλέγατε</strong> διατροφικά δεδομένα από 20 ασθενείς;</li>
+</ul>
+<hr />
+<h3 id="προσωπικές-σημειώσεις">🗒️ Προσωπικές σημειώσεις</h3>
+<p><textarea class="ws-box" name="note001" rows="4"></textarea></p>
+<p><strong>Βοήθεια:</strong> Forum e-class · pitoglou@hua.gr</p>
+
+  </form>
+</main>
+
+<script>window.WORKSHEET = {"slug": "ge1400", "lab": 2, "pdf": "forms/lab-02.pdf?v=ca75f8ca5c83", "filename": "Εργαστηριο_02_Φυλλο_Εργασιας_Φοιτητη_ΦΟΡΜΑ.pdf", "version": "ca75f8ca5c83"};</script>
+<script src="assets/pdf-lib.min.js"></script>
+<script src="assets/fontkit.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

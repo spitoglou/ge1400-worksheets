@@ -1,0 +1,70 @@
+/* The course palette (tools/teach/theme.py) and the form's own field colours
+   (tools/teach/forms.py), so the page reads as the same worksheet. */
+:root {
+  --dark: #1F4E79;
+  --mid: #2E74B5;
+  --slate: #404040;
+  --grey: #666666;
+  --row: #F2F2F2;
+  --field-line: #4A8BA8;
+  --field-fill: #EEF3F6;
+  --bg: #FFFFFF;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--slate);
+  font: 16px/1.5 "Noto Sans", "Segoe UI", Arial, sans-serif;
+}
+header.site { background: var(--dark); padding: 10px 16px; }
+header.site .back { color: #fff; text-decoration: none; font-weight: 600; }
+main { max-width: 860px; margin: 0 auto; padding: 16px 16px 64px; }
+h1 { color: var(--dark); font-size: 1.6rem; line-height: 1.25; }
+h2 { color: var(--mid); font-size: 1.2rem; margin-top: 2rem; }
+h3 { color: var(--slate); font-size: 1.05rem; }
+a { color: var(--mid); }
+hr { border: 0; border-top: 1px solid #ccc; margin: 1.5rem 0; }
+blockquote { margin: 1rem 0; padding: 4px 14px; border-left: 3px solid var(--mid); background: var(--row); }
+code { background: var(--row); padding: 0 3px; border-radius: 3px; }
+img { max-width: 100%; height: auto; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; display: block; overflow-x: auto; }
+th { background: var(--dark); color: #fff; text-align: left; }
+th, td { padding: 6px 8px; border: 1px solid #d0d0d0; vertical-align: top; }
+tr:nth-child(even) td { background: var(--row); }
+ul.contains-task-list, ul.task-list { list-style: none; padding-left: 1.2rem; }
+
+.toolbar {
+  position: sticky; top: 0; z-index: 2;
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  padding: 8px 16px; background: #fff; border-bottom: 1px solid #d0d0d0;
+}
+.toolbar button, .toolbar .button {
+  font: inherit; font-size: 0.95rem; cursor: pointer;
+  padding: 6px 12px; border-radius: 4px;
+  border: 1px solid var(--mid); background: #fff; color: var(--mid);
+}
+.toolbar .primary { background: var(--mid); color: #fff; }
+.toolbar button:disabled { opacity: 0.6; cursor: progress; }
+#status { font-size: 0.9rem; color: var(--grey); }
+#status.error { color: #B00020; font-weight: 600; }
+#status.ok { color: #1B7F3B; }
+.howto { font-size: 0.92rem; color: var(--grey); background: var(--row); padding: 10px 12px; border-radius: 4px; }
+
+.ws-line, .ws-cell, .ws-box {
+  font: inherit; font-size: 0.95rem; color: #000;
+  border: 1px solid var(--field-line); background: var(--field-fill);
+  border-radius: 2px; padding: 3px 6px;
+}
+.ws-line { max-width: 100%; min-width: 6em; }
+.ws-line.ws-wide { width: 100%; }
+.ws-cell { width: 100%; min-width: 8em; resize: vertical; }
+.ws-box { display: block; width: 100%; resize: vertical; margin: 4px 0 8px; }
+.ws-tick { width: 1.1rem; height: 1.1rem; accent-color: var(--mid); vertical-align: middle; }
+.ws-line:focus, .ws-cell:focus, .ws-box:focus { outline: 2px solid var(--mid); outline-offset: 0; background: #fff; }
+ul.labs li { margin: 6px 0; }
+
+@media (max-width: 600px) {
+  .ws-line { width: 100% !important; display: block; margin: 4px 0; }
+}

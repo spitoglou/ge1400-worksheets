@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Εργαστήριο 01: Φύλλο Εργασίας Φοιτητή · ΓΕ1400</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <a class="back" href="index.html">ΓΕ1400 · Φύλλα Εργασίας Εργαστηρίου</a>
+</header>
+
+<div class="toolbar" role="toolbar" aria-label="Ενέργειες">
+  <button type="button" id="export" class="primary">Λήψη συμπληρωμένου PDF</button>
+  <label class="button" for="import">Συνέχεια από PDF
+    <input type="file" id="import" accept="application/pdf" hidden>
+  </label>
+  <button type="button" id="clear">Καθαρισμός</button>
+  <span id="status" role="status" aria-live="polite"></span>
+</div>
+
+<main>
+  <p class="howto">Συμπληρώστε τα πεδία, πατήστε <strong>«Λήψη συμπληρωμένου PDF»</strong> και ανεβάστε
+  το αρχείο που κατέβηκε στην εργασία του εργαστηρίου στο e-class. Οι απαντήσεις σας κρατιούνται
+  σε αυτόν τον browser, σε αυτή τη συσκευή, μέχρι να πατήσετε «Καθαρισμός». Τίποτα δεν στέλνεται
+  πουθενά από αυτή τη σελίδα. Αν έχετε ήδη ξεκινήσει το PDF σε άλλο πρόγραμμα, το «Συνέχεια από PDF»
+  φορτώνει τις απαντήσεις του εδώ.</p>
+
+  <h1>Εργαστήριο 01: Φύλλο Εργασίας Φοιτητή</h1>
+  <form id="worksheet" autocomplete="off" onsubmit="return false">
+<h1 id="εργαστηριο-01---φυλλο-εργασιασ">📝 ΕΡΓΑΣΤΗΡΙΟ 01 - ΦΥΛΛΟ
+ΕΡΓΑΣΙΑΣ</h1>
+<p><strong>Ονοματεπώνυμο:</strong>
+<input type="text" class="ws-line" name="f013" style="width:13em" autocomplete="off">
+<strong>ΑΜ:</strong>
+<input type="text" class="ws-line" name="f014" style="width:6em" autocomplete="off">
+<strong>Ημ/νία:</strong>
+<input type="text" class="ws-line" name="f015" style="width:5em" autocomplete="off"></p>
+<blockquote>
+<p>Αυτό το εργαστήριο γίνεται <strong>στο σπίτι</strong>, με τον δικό
+σας ρυθμό. Σας βοηθά να εμπεδώσετε και να έχετε σημειώσεις για
+μελέτη.</p>
+<p><strong>Το φύλλο εργασίας είναι υποχρεωτικό:</strong> το συμπληρώνετε
+και το υποβάλλετε <strong>μέσω e-class έως την Κυριακή μετά τη διάλεξη,
+23:55</strong>. Στα εργαστήρια που γίνονται στην αίθουσα, από τη Διάλεξη
+3 και μετά, επιτρέπονται <strong>έως δύο απουσίες</strong>· με
+περισσότερες χάνεται το δικαίωμα συμμετοχής στην εξέταση.</p>
+</blockquote>
+<hr />
+<h2 id="προθερμανση">🔥 ΠΡΟΘΕΡΜΑΝΣΗ</h2>
+<ol type="1">
+<li><p>Στη διάλεξη είδαμε το μοντέλο <strong>DIKW</strong>. Συμπληρώστε
+τη σειρά:</p>
+<p>Δεδομένα →
+<input type="text" class="ws-line" name="f016" style="width:7em" autocomplete="off">
+→
+<input type="text" class="ws-line" name="f017" style="width:7em" autocomplete="off">
+→
+<input type="text" class="ws-line" name="f018" style="width:7em" autocomplete="off"></p></li>
+<li><p>Αναφέρετε <strong>ένα</strong> ψηφιακό εργαλείο που έχετε ήδη
+χρησιμοποιήσει για μελέτη:</p>
+<p><textarea class="ws-box" name="ib005" rows="2"></textarea></p></li>
+</ol>
+<hr />
+<h2 id="σελιδοδεικτεσ---αποθηκευστε-αυτα-τα-url">🔖 ΣΕΛΙΔΟΔΕΙΚΤΕΣ -
+ΑΠΟΘΗΚΕΥΣΤΕ ΑΥΤΑ ΤΑ URL</h2>
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr>
+<th>Εργαλείο</th>
+<th style="text-align: center;">Το άνοιξα ✅</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>e-class DIET312</td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c020"></td>
+</tr>
+<tr>
+<td>PubMed</td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c021"></td>
+</tr>
+<tr>
+<td>Google Scholar</td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c022"></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="σημειωσεισ">✍️ ΣΗΜΕΙΩΣΕΙΣ</h2>
+<p><em>(κρατήστε σύντομες σημειώσεις καθώς δουλεύετε)</em></p>
+<ul>
+<li>e-class:
+<textarea class="ws-box" name="nb006" rows="2"></textarea></li>
+<li>Οργάνωση αρχείων:
+<textarea class="ws-box" name="nb007" rows="2"></textarea></li>
+<li>PubMed:
+<textarea class="ws-box" name="nb008" rows="2"></textarea></li>
+</ul>
+<hr />
+<h2 id="ασκηση-1---e-class-ατομικά-εύκολη">ΑΣΚΗΣΗ 1 - e-class · ατομικά
+· εύκολη</h2>
+<p><strong>Στόχος:</strong> Σύνδεση και ανάκτηση υλικού.</p>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t025"> Συνδέθηκα στο
+e-class με τα ιδρυματικά μου credentials.</li>
+<li><input type="checkbox" class="ws-tick" name="t026"> Εγγράφηκα /
+βρήκα το μάθημα <strong>DIET312</strong>.</li>
+<li><input type="checkbox" class="ws-tick" name="t027"> Κατέβασα τις
+σημειώσεις της <strong>Διάλεξης 1</strong>.</li>
+</ul>
+<p><strong>Απαντήστε:</strong></p>
+<p>α) Πόσοι φάκελοι/ενότητες υπάρχουν στα «Έγγραφα» του μαθήματος;
+<input type="text" class="ws-line" name="f019" style="width:5em" autocomplete="off"></p>
+<p>β) Πού θα δείτε τις ανακοινώσεις του μαθήματος;
+<textarea class="ws-box" name="pb009" rows="2"></textarea></p>
+<hr />
+<h2 id="ασκηση-2---οργάνωση-αρχείων-ατομικά-εύκολη">ΑΣΚΗΣΗ 2 - Οργάνωση
+αρχείων · ατομικά · εύκολη</h2>
+<p><strong>Στόχος:</strong> Συνεπής δομή &amp; ονοματοδοσία.</p>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t028"> Δημιούργησα
+φάκελο <code>ΓΕ1400</code> με υποφακέλους: Διαλέξεις, Εργαστήρια,
+Βιβλιογραφία, Εργασίες.</li>
+<li><input type="checkbox" class="ws-tick" name="t029"> Μετέφερα το
+αρχείο της Διάλεξης 1 στο <code>Διαλέξεις/</code>.</li>
+<li><input type="checkbox" class="ws-tick" name="t030"> Το μετονόμασα
+σωστά.</li>
+</ul>
+<p><strong>Γράψτε το όνομα που δώσατε στο αρχείο:</strong></p>
+<p><input type="text" class="ws-line ws-wide" name="line004" autocomplete="off"></p>
+<p><strong>✅ ΕΛΕΓΧΟΣ:</strong> Είναι χωρίς κενά και τόνους σε κρίσιμα
+σημεία; <input type="checkbox" class="ws-tick" name="c023"> Ναι
+<input type="checkbox" class="ws-tick" name="c024"> Όχι</p>
+<p><strong>❌ ΚΟΙΝΟ ΛΑΘΟΣ:</strong> Να αφήνετε τα αρχεία στο «Λήψεις».
+Γιατί είναι πρόβλημα;</p>
+<p><textarea class="ws-box" name="ans002" rows="4"></textarea></p>
+<hr />
+<h2 id="ασκηση-3---αναζήτηση-βιβλιογραφίας-στο-pubmed-ατομικά-εύκολη">ΑΣΚΗΣΗ
+3 - Αναζήτηση βιβλιογραφίας στο PubMed · ατομικά · εύκολη</h2>
+<p><strong>Στόχος:</strong> Να βρείτε ένα επιστημονικό άρθρο, να το
+αποθηκεύσετε σωστά και να κρίνετε αν είναι αξιόπιστη πηγή.</p>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t031"> Αναζήτησα στο
+PubMed: <code>nutrition informatics</code></li>
+<li><input type="checkbox" class="ws-tick" name="t032"> Εφάρμοσα φίλτρο
+<strong>Free full text</strong> και <strong>5 years</strong>.</li>
+<li><input type="checkbox" class="ws-tick" name="t033"> Κατέβασα το PDF
+ενός άρθρου και το αποθήκευσα στο <code>ΓΕ1400/Βιβλιογραφία/</code> με
+σωστό όνομα.</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 57%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>Πεδίο</th>
+<th>Απάντηση</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Τίτλος</td>
+<td><textarea class="ws-cell" name="tc041" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Έτος</td>
+<td><textarea class="ws-cell" name="tc042" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Περιοδικό</td>
+<td><textarea class="ws-cell" name="tc043" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Όνομα αρχείου που έδωσα</td>
+<td><textarea class="ws-cell" name="tc044" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Γιατί το θεωρώ αξιόπιστη πηγή (1 λόγος)</td>
+<td><textarea class="ws-cell" name="tc045" rows="2"></textarea></td>
+</tr>
+</tbody>
+</table>
+<p><strong>⚠️ Ηθική:</strong> Γιατί προτιμούμε νόμιμες οδούς (PubMed
+Central, Unpaywall) αντί για ιστότοπους πειρατείας;</p>
+<p><textarea class="ws-box" name="ans003" rows="4"></textarea></p>
+<hr />
+<h2 id="αυτοαξιολογηση">✅ ΑΥΤΟΑΞΙΟΛΟΓΗΣΗ</h2>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t034"> Μπορώ να συνδεθώ
+και να βρω υλικό στο e-class.</li>
+<li><input type="checkbox" class="ws-tick" name="t035"> Οργανώνω τα
+αρχεία μου με συνέπεια.</li>
+<li><input type="checkbox" class="ws-tick" name="t036"> Κάνω μια βασική
+αναζήτηση στο PubMed.</li>
+<li><input type="checkbox" class="ws-tick" name="t037"> Ξεχωρίζω μια
+αξιόπιστη από μια αναξιόπιστη πηγή.</li>
+</ul>
+<hr />
+<h2 id="exit-ticket-συμπληρώστε-το-πριν-από-την-υποβολή">🎟️ EXIT TICKET
+(συμπληρώστε το πριν από την υποβολή)</h2>
+<ol type="1">
+<li><p>Ένα πράγμα που <strong>έμαθα</strong> σήμερα:
+<textarea class="ws-box" name="pb010" rows="2"></textarea></p></li>
+<li><p>Ένα πράγμα που <strong>δυσκολεύτηκα</strong>:
+<textarea class="ws-box" name="pb011" rows="2"></textarea></p></li>
+<li><p>Με μία λέξη, πώς συνδέεται η σημερινή αναζήτηση πηγών με το
+<strong>DIKW</strong>;</p>
+<p><textarea class="ws-box" name="ib012" rows="2"></textarea></p></li>
+</ol>
+<hr />
+<h2 id="προετοιμασια-για-διαλεξη-2">📅 ΠΡΟΕΤΟΙΜΑΣΙΑ ΓΙΑ ΔΙΑΛΕΞΗ 2</h2>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t038"> Μελετήστε τις
+σημειώσεις της Διάλεξης 1 (e-class).</li>
+<li><input type="checkbox" class="ws-tick" name="t039"> Σκεφτείτε: πώς
+περιγράφουν την <strong>ίδια</strong> διάγνωση ένας γιατρός κι ένας
+διαιτολόγος;</li>
+<li><input type="checkbox" class="ws-tick" name="t040"> Προαιρετικά:
+ανοίξτε τον browser του ICD-11 (WHO).</li>
+</ul>
+<hr />
+<h3 id="προσωπικές-σημειώσεις">🗒️ Προσωπικές σημειώσεις</h3>
+<p><textarea class="ws-box" name="note001" rows="4"></textarea></p>
+<p><strong>Βοήθεια:</strong> Forum e-class · pitoglou@hua.gr</p>
+
+  </form>
+</main>
+
+<script>window.WORKSHEET = {"slug": "ge1400", "lab": 1, "pdf": "forms/lab-01.pdf?v=4d39ec706d04", "filename": "Εργαστηριο_01_Φυλλο_Εργασιας_Φοιτητη_ΦΟΡΜΑ.pdf", "version": "4d39ec706d04"};</script>
+<script src="assets/pdf-lib.min.js"></script>
+<script src="assets/fontkit.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
