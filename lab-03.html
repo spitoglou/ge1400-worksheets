@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Εργαστήριο 03: Φύλλο Εργασίας Φοιτητή · ΓΕ1400</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+<header class="site">
+  <a class="back" href="index.html">ΓΕ1400 · Φύλλα Εργασίας Εργαστηρίου</a>
+</header>
+
+<div class="toolbar" role="toolbar" aria-label="Ενέργειες">
+  <button type="button" id="export" class="primary">Λήψη συμπληρωμένου PDF</button>
+  <label class="button" for="import">Συνέχεια από PDF
+    <input type="file" id="import" accept="application/pdf" hidden>
+  </label>
+  <button type="button" id="clear">Καθαρισμός</button>
+  <button type="button" id="sheet-toggle" aria-pressed="false">Υπολογιστικό φύλλο</button>
+  <span id="status" role="status" aria-live="polite"></span>
+</div>
+
+<main>
+  <p class="howto">Συμπληρώστε τα πεδία, πατήστε <strong>«Λήψη συμπληρωμένου PDF»</strong> και ανεβάστε
+  το αρχείο που κατέβηκε στην εργασία του εργαστηρίου στο e-class. Οι απαντήσεις σας κρατιούνται
+  σε αυτόν τον browser, σε αυτή τη συσκευή, μέχρι να πατήσετε «Καθαρισμός». Τίποτα δεν στέλνεται
+  πουθενά από αυτή τη σελίδα. Αν έχετε ήδη ξεκινήσει το PDF σε άλλο πρόγραμμα, το «Συνέχεια από PDF»
+  φορτώνει τις απαντήσεις του εδώ.</p>
+  <p class="howto">Για τις ασκήσεις με δεδομένα πατήστε <strong>«Υπολογιστικό φύλλο»</strong>: ανοίγει
+  κάτω από το φύλλο εργασίας με το αρχείο <code>diatrofika_dedomena_deigma.csv</code> ήδη φορτωμένο και δέχεται τύπους όπως
+  το Excel. Οι αλλαγές σας κρατιούνται σε αυτόν τον browser· το «Επαναφορά» φέρνει πίσω το αρχικό αρχείο.
+  Γράψτε τους τύπους και τα αποτελέσματα στα πεδία του φύλλου εργασίας, όπως ζητείται.</p>
+
+
+  <p class="companion"><span>Συνοδευτικό υλικό:</span> 
+<span class="materials">
+  <a class="material-link" href="materials/lab-03/Εργαστηριο_03_Ποροι_Συνδεσμοι.pdf" data-label="Πόροι και σύνδεσμοι" target="_blank" rel="noopener">Πόροι και σύνδεσμοι</a>
+  <a class="material-link" href="materials/lab-03/Εργαστηριο_03_Quick_Reference_Card.pdf" data-label="Quick Reference Card" target="_blank" rel="noopener">Quick Reference Card</a>
+  <a class="material-link" href="materials/lab-03/lecture_03_presentation_eclass.pdf" data-label="Διαφάνειες Διάλεξης 3" target="_blank" rel="noopener">Διαφάνειες Διάλεξης 3</a>
+</span></p>
+
+  <h1>Εργαστήριο 03: Φύλλο Εργασίας Φοιτητή</h1>
+  <form id="worksheet" autocomplete="off" onsubmit="return false">
+<h1 id="εργαστηριο-03---φυλλο-εργασιασ">📝 ΕΡΓΑΣΤΗΡΙΟ 03 - ΦΥΛΛΟ
+ΕΡΓΑΣΙΑΣ</h1>
+<p><strong>Ονοματεπώνυμο:</strong>
+<input type="text" class="ws-line" name="f011" style="width:13em" autocomplete="off">
+<strong>ΑΜ:</strong>
+<input type="text" class="ws-line" name="f012" style="width:6em" autocomplete="off">
+<strong>Ημ/νία:</strong>
+<input type="text" class="ws-line" name="f013" style="width:5em" autocomplete="off"></p>
+<blockquote>
+<p>Δεδομένα, ποιότητα &amp; περιγραφική ανάλυση σε λογιστικό φύλλο. ⚠️
+Δουλεύουμε <strong>μόνο</strong> με το πλασματικό σύνολο δεδομένων
+(κωδικοί P01…).</p>
+<p><strong>Το φύλλο εργασίας είναι υποχρεωτικό</strong> σε κάθε
+εργαστήριο. Το υποβάλλετε μέσω e-class <strong>έως την Παρασκευή,
+23:55</strong>. Εκπρόθεσμα γίνεται δεκτό έως την Κυριακή, 23:55· μετά
+δεν γίνεται δεκτό.</p>
+</blockquote>
+<hr />
+<h2 id="προθερμανση">🔥 ΠΡΟΘΕΡΜΑΝΣΗ</h2>
+<ol type="1">
+<li><p>Γιατί τα δεδομένα υγείας θεωρούνται «ευαίσθητα»;
+<textarea class="ws-box" name="pb003" rows="2"></textarea></p></li>
+<li><p>Ένα παράδειγμα «κακού» δεδομένου (garbage in):
+<textarea class="ws-box" name="pb004" rows="2"></textarea></p></li>
+</ol>
+<hr />
+<h2 id="εργαλεια---ανοιξτε-τα">🔖 ΕΡΓΑΛΕΙΑ - ΑΝΟΙΞΤΕ ΤΑ</h2>
+<table>
+<colgroup>
+<col style="width: 63%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr>
+<th>Πόρος</th>
+<th style="text-align: center;">✅</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Υπολογιστικό φύλλο της σελίδας των φύλλων εργασίας
+(https://spitoglou.github.io/ge1400-worksheets/), ή Excel / LibreOffice
+Calc / Google Sheets</td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c019"></td>
+</tr>
+<tr>
+<td>Αρχείο <code>diatrofika_dedomena_deigma.csv</code> (φορτώνεται μόνο
+του στο υπολογιστικό φύλλο της σελίδας· και στο e-class)</td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c020"></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="ασκηση-1---σχεδιασμός-φόρμας">ΑΣΚΗΣΗ 1 - Σχεδιασμός φόρμας</h2>
+<p>Συμπληρώστε τον πίνακα σχεδιασμού. Για κάθε πεδίο: μονάδα &amp; ένα
+λογικό εύρος.</p>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 14%" />
+<col style="width: 31%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr>
+<th>Πεδίο</th>
+<th>Τύπος</th>
+<th>Μονάδα</th>
+<th>Λογικό εύρος</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ID (κωδικός)</td>
+<td>κείμενο</td>
+<td>-</td>
+<td>Pxx</td>
+</tr>
+<tr>
+<td>Ηλικία</td>
+<td>αριθμός</td>
+<td>έτη</td>
+<td><textarea class="ws-cell" name="tc034" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Φύλο</td>
+<td>κατηγορία</td>
+<td>-</td>
+<td>Α / Γ</td>
+</tr>
+<tr>
+<td>Βάρος</td>
+<td>αριθμός</td>
+<td><textarea class="ws-cell" name="tc035" rows="2"></textarea></td>
+<td><textarea class="ws-cell" name="tc036" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Ύψος</td>
+<td>αριθμός</td>
+<td><textarea class="ws-cell" name="tc037" rows="2"></textarea></td>
+<td><textarea class="ws-cell" name="tc038" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Περιφέρεια μέσης</td>
+<td>αριθμός</td>
+<td><textarea class="ws-cell" name="tc039" rows="2"></textarea></td>
+<td><textarea class="ws-cell" name="tc040" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Ενέργεια</td>
+<td>αριθμός</td>
+<td><textarea class="ws-cell" name="tc041" rows="2"></textarea></td>
+<td><textarea class="ws-cell" name="tc042" rows="2"></textarea></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Γιατί κωδικός αντί ονόματος;</strong>
+<textarea class="ws-box" name="pb005" rows="2"></textarea></p>
+<hr />
+<h2 id="ασκηση-2---οργάνωση-δεδομένων">ΑΣΚΗΣΗ 2 - Οργάνωση
+δεδομένων</h2>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t021"> Άνοιξα το CSV·
+εμφανίζεται σε <strong>7 στήλες</strong>.</li>
+<li><input type="checkbox" class="ws-tick" name="t022"> Επιβεβαίωσα
+«tidy»: μία μεταβλητή/στήλη, ένας ασθενής/γραμμή.</li>
+<li><input type="checkbox" class="ws-tick" name="t023"> Πάγωσα την πρώτη
+γραμμή.</li>
+</ul>
+<p><strong>Πόσες γραμμές δεδομένων υπάρχουν (εκτός
+επικεφαλίδας);</strong>
+<input type="text" class="ws-line" name="f014" style="width:5em" autocomplete="off"></p>
+<hr />
+<h2 id="ασκηση-3---περιγραφικά-μέτρα-γράφημα">ΑΣΚΗΣΗ 3 - Περιγραφικά
+μέτρα &amp; γράφημα</h2>
+<p>Για τη στήλη <strong>Βάρος_kg</strong>, υπολογίστε (γράψτε τύπο &amp;
+αποτέλεσμα):</p>
+<table style="width:99%;">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 54%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr>
+<th>Μέτρο</th>
+<th>Τύπος (π.χ. <code>=AVERAGE(D2:D17)</code>)</th>
+<th style="text-align: center;">Αποτέλεσμα</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Μέσος</td>
+<td><textarea class="ws-cell" name="tc043" rows="2"></textarea></td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc044" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Διάμεσος</td>
+<td><textarea class="ws-cell" name="tc045" rows="2"></textarea></td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc046" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Τυπική απόκλιση</td>
+<td><textarea class="ws-cell" name="tc047" rows="2"></textarea></td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc048" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Ελάχιστο</td>
+<td><textarea class="ws-cell" name="tc049" rows="2"></textarea></td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc050" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>Μέγιστο</td>
+<td><textarea class="ws-cell" name="tc051" rows="2"></textarea></td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc052" rows="2"></textarea></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t024"> Έφτιαξα
+<strong>γράφημα</strong> (ιστόγραμμα/ραβδόγραμμα) του βάρους.</li>
+</ul>
+<p><strong>🚀 Προχωρημένη:</strong> στήλη ΔΜΣ
+<code>=Βάρος/(Ύψος/100)^2</code>. Πόσοι έχουν ΔΜΣ&gt;30;
+<input type="text" class="ws-line" name="f015" style="width:5em" autocomplete="off"></p>
+<hr />
+<h2 id="ασκηση-4---έλεγχος-ποιότητας">ΑΣΚΗΣΗ 4 - Έλεγχος ποιότητας</h2>
+<p>Εντοπίστε <strong>τέσσερα</strong> προβλήματα ποιότητας (ID + τι
+συμβαίνει):</p>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 45%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>ID</th>
+<th>Πρόβλημα</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><textarea class="ws-cell" name="tc053" rows="2"></textarea></td>
+<td><textarea class="ws-cell" name="tc054" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>2</td>
+<td><textarea class="ws-cell" name="tc055" rows="2"></textarea></td>
+<td><textarea class="ws-cell" name="tc056" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>3</td>
+<td><textarea class="ws-cell" name="tc057" rows="2"></textarea></td>
+<td><textarea class="ws-cell" name="tc058" rows="2"></textarea></td>
+</tr>
+<tr>
+<td>4</td>
+<td><textarea class="ws-cell" name="tc059" rows="2"></textarea></td>
+<td><textarea class="ws-cell" name="tc060" rows="2"></textarea></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ερώτηση κριτικής σκέψης:</strong> Το βάρος 145 kg - το
+διαγράφετε αμέσως; Γιατί / γιατί όχι;</p>
+<p><textarea class="ws-box" name="ans002" rows="4"></textarea></p>
+<hr />
+<h2 id="ολοκληρωμενη-ασκηση">🎯 ΟΛΟΚΛΗΡΩΜΕΝΗ ΑΣΚΗΣΗ</h2>
+<p>Φτιάξτε ένα «καθαρό» αντίγραφο και τεκμηριώστε τις αλλαγές:</p>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t025"> Διόρθωσα το ύψος
+του <strong>P07</strong> (υπόθεση:
+<input type="text" class="ws-line" name="f016" style="width:6em" autocomplete="off">
+cm) · σημείωσα την αλλαγή.</li>
+<li><input type="checkbox" class="ws-tick" name="t026"> Αφαίρεσα το
+διπλότυπο <strong>P05</strong>.</li>
+<li><input type="checkbox" class="ws-tick" name="t027"> Σημείωσα το
+missing (<strong>P10</strong>) · επισήμανα το outlier
+(<strong>P12</strong>).</li>
+</ul>
+<p><strong>Μετά το καθάρισμα - Βάρος:</strong> Μέσος =
+<input type="text" class="ws-line" name="f017" style="width:5em" autocomplete="off">
+Διάμεσος =
+<input type="text" class="ws-line" name="f018" style="width:5em" autocomplete="off"></p>
+<p><strong>Ένα συμπέρασμα (1 πρόταση):</strong>
+<textarea class="ws-box" name="pb006" rows="2"></textarea></p>
+<p><strong>Γιατί κρατάμε ίχνος (log) των αλλαγών μας;</strong>
+<textarea class="ws-box" name="pb007" rows="2"></textarea></p>
+<hr />
+<h2 id="αυτοαξιολογηση">✅ ΑΥΤΟΑΞΙΟΛΟΓΗΣΗ</h2>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t028"> Οργανώνω
+δεδομένα κατά «tidy data».</li>
+<li><input type="checkbox" class="ws-tick" name="t029"> Υπολογίζω
+περιγραφικά μέτρα σε υπολογιστικό φύλλο.</li>
+<li><input type="checkbox" class="ws-tick" name="t030"> Εντοπίζω
+missing, outliers, σφάλματα, διπλότυπα.</li>
+<li><input type="checkbox" class="ws-tick" name="t031"> Εξηγώ γιατί
+χρησιμοποιούμε ανωνυμοποιημένα δεδομένα.</li>
+</ul>
+<hr />
+<h2 id="exit-ticket-παραδώστε-πριν-φύγετε">🎟️ EXIT TICKET (παραδώστε
+πριν φύγετε)</h2>
+<ol type="1">
+<li><p>Μέσος <strong>ή</strong> διάμεσος με ένα ακραίο βάρος 145 kg -
+ποιο &amp; γιατί;</p>
+<p><textarea class="ws-box" name="ib008" rows="2"></textarea></p></li>
+<li><p>Ένα πράγμα που <strong>δυσκολεύτηκα</strong> στο υπολογιστικό
+φύλλο:
+<textarea class="ws-box" name="pb009" rows="2"></textarea></p></li>
+<li><p>Μία αρχή GDPR που εφάρμοσα σήμερα:
+<textarea class="ws-box" name="pb010" rows="2"></textarea></p></li>
+</ol>
+<hr />
+<h2 id="προετοιμασια-για-διαλεξη-4">📅 ΠΡΟΕΤΟΙΜΑΣΙΑ ΓΙΑ ΔΙΑΛΕΞΗ 4</h2>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t032"> Μελετήστε τις
+σημειώσεις της Διάλεξης 3 (e-class).</li>
+<li><input type="checkbox" class="ws-tick" name="t033"> Σκεφτείτε: πώς
+«ταξιδεύει» η πληροφορία ενός ασθενούς μέσα σε ένα νοσοκομείο;</li>
+</ul>
+<hr />
+<h3 id="προσωπικές-σημειώσεις">🗒️ Προσωπικές σημειώσεις</h3>
+<p><textarea class="ws-box" name="note001" rows="4"></textarea></p>
+<p><strong>Βοήθεια:</strong> Forum e-class · pitoglou@hua.gr</p>
+
+  </form>
+</main>
+
+<script>window.WORKSHEET = {"slug": "ge1400", "lab": 3, "pdf": "forms/lab-03.pdf?v=21ab90b6fbed", "filename": "Εργαστηριο_03_Φυλλο_Εργασιας_Φοιτητη_ΦΟΡΜΑ.pdf", "version": "21ab90b6fbed", "sheet": {"csv": "data/lab-03/diatrofika_dedomena_deigma.csv?v=f962bdb341dd", "name": "diatrofika_dedomena_deigma.csv", "version": "f962bdb341dd"}};</script>
+<script src="assets/pdf-lib.min.js"></script>
+<script src="assets/fontkit.umd.min.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/sheet-engine.js"></script>
+<script src="assets/sheet.js"></script>
+<dialog id="material" aria-labelledby="material-title">
+  <div class="material-bar">
+    <strong class="material-title" id="material-title"></strong>
+    <a class="material-open" href="#" target="_blank" rel="noopener">Άνοιγμα σε νέα καρτέλα</a>
+    <a class="material-save" href="#">Λήψη</a>
+    <button type="button" class="material-close" aria-label="Κλείσιμο">✕</button>
+  </div>
+  <div class="material-viewer" tabindex="0"></div>
+</dialog>
+<script src="assets/materials.js"></script>
+</body>
+</html>
