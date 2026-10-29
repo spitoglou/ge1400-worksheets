@@ -93,6 +93,7 @@
         i = j + 1;
         continue;
       }
+      if (src.startsWith("#REF!", i)) throw err("#REF!");
       const num = /^(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?/.exec(src.slice(i));
       if (num) { toks.push({ t: "num", v: Number(num[0]) }); i += num[0].length; continue; }
       const word = /^\$?[A-Za-z][A-Za-z0-9.]*\$?\d*/.exec(src.slice(i));
@@ -443,12 +444,30 @@
       return grid;
     }
 
+    // Rows and columns in and out, with every formula's references moved the
+    // way a spreadsheet moves them: cells below or right of the change follow
+    // it, a range that spans it grows or shrinks, a deleted cell is #REF!.
+    remap(fn) {
+      this.cells = this.cells.map(row => row.map(t => (t.startsWith("=") ? rewriteRefs(t, fn) : t)));
+    }
     deleteRow(r) {
       this.cells.splice(r, 1);
-      this.cells = this.cells.map(row => row.map(t => (t.startsWith("=") ? rewriteRefs(t, ref => deletedRow(ref, r)) : t)));
+      this.remap(ref => deleted(ref, r, "r"));
     }
-    addRow() { this.cells.push(new Array(this.cols).fill("")); }
-    addColumn() { for (const row of this.cells) row.push(""); }
+    deleteColumn(c) {
+      for (const row of this.cells) row.splice(c, 1);
+      this.remap(ref => deleted(ref, c, "c"));
+    }
+    insertRow(at) {
+      this.cells.splice(at, 0, new Array(this.cols).fill(""));
+      this.remap(ref => inserted(ref, at, "r"));
+    }
+    insertColumn(at) {
+      for (const row of this.cells) row.splice(at, 0, "");
+      this.remap(ref => inserted(ref, at, "c"));
+    }
+    addRow() { this.insertRow(this.rows); }
+    addColumn() { this.insertColumn(this.cols); }
   }
 
   // ---- moving formulas ---------------------------------------------------
@@ -500,15 +519,23 @@
     });
   }
 
-  function deletedRow({ start, end }, row) {
+  // `k` is "r" or "c": the axis the row or column was removed from.
+  function deleted({ start, end }, at, k) {
     if (!end) {
-      if (start.r === row) return "#REF!";
-      return refText(start.r > row ? { ...start, r: start.r - 1 } : start);
+      if (start[k] === at) return "#REF!";
+      return refText(start[k] > at ? { ...start, [k]: start[k] - 1 } : start);
     }
     let a = start, b = end;
-    if (a.r > b.r) [a, b] = [b, a];
-    if (a.r === row && b.r === row) return "#REF!";
-    return refText({ ...a, r: a.r > row ? a.r - 1 : a.r }) + ":" + refText({ ...b, r: b.r >= row ? b.r - 1 : b.r });
+    if (a[k] > b[k]) [a, b] = [b, a];
+    if (a[k] === at && b[k] === at) return "#REF!";
+    return refText({ ...a, [k]: a[k] > at ? a[k] - 1 : a[k] }) + ":" + refText({ ...b, [k]: b[k] >= at ? b[k] - 1 : b[k] });
+  }
+  function inserted({ start, end }, at, k) {
+    const move = p => (p[k] >= at ? { ...p, [k]: p[k] + 1 } : p);
+    if (!end) return refText(move(start));
+    let a = start, b = end;
+    if (a[k] > b[k]) [a, b] = [b, a];
+    return refText(move(a)) + ":" + refText(move(b));
   }
 
   // ---- CSV ---------------------------------------------------------------

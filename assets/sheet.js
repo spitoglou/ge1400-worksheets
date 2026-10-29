@@ -42,6 +42,11 @@
       <p>Πλήκτρα: βέλη για μετακίνηση, Enter ή F2 για επεξεργασία, Delete για καθάρισμα,
       Ctrl+C / Ctrl+V για αντιγραφή και επικόλληση (οι τύποι προσαρμόζονται), Ctrl+D για συμπλήρωση προς τα κάτω.
       Το <code>$</code> κρατά σταθερή μια στήλη ή γραμμή (<code>$D$2</code>).</p>
+      <p>Το μικρό τετράγωνο κάτω δεξιά στην επιλογή συμπληρώνει όταν το σύρετε (κάτω ή δεξιά)· με διπλό κλικ
+      συμπληρώνει ως το τέλος των δεδομένων. Δύο αριθμοί στη σειρά (1, 2) συνεχίζουν ως ακολουθία.
+      Κλικ στο γράμμα μιας στήλης ή στον αριθμό μιας γραμμής την επιλέγει ολόκληρη. Το δεξί κλικ ανοίγει
+      μενού με εισαγωγή και διαγραφή γραμμών και στηλών, αντιγραφή και επικόλληση. Τα «+ Στήλη» και
+      «+ Γραμμή» προσθέτουν δίπλα στο επιλεγμένο κελί.</p>
       <p>Συναρτήσεις: <span class="sheet-fns"></span>.</p>
     </div>
     <div class="sheet-formula">
@@ -76,6 +81,8 @@
   let editor = null;  // {r, c, input, before, pick: {start, end} | null}
   let dragging = false;
   let clip = null;    // {r, c, cells}: what Ctrl+C took, so a paste can move formulas
+  let fillTo = null;  // {r, c}: where a drag of the fill handle has reached
+  let downAt = null;  // where the button went down: a redraw under a still pointer is not a drag
 
   function save() {
     try {
@@ -111,14 +118,14 @@
   function render() {
     values = sheet.evaluate();
     const rows = sheet.rows, cols = sheet.cols;
-    const head = ["<thead><tr><th class='corner'></th>"];
-    for (let c = 0; c < cols; c++) head.push(`<th class="col${c === sel.c ? " on" : ""}">${E.colName(c)}</th>`);
+    const head = ["<thead><tr><th class='corner' title='Επιλογή όλων'></th>"];
+    for (let c = 0; c < cols; c++) head.push(`<th class="col${inSel(0, c) || (c >= box().c1 && c <= box().c2) ? " on" : ""}" data-col="${c}" title="Επιλογή στήλης">${E.colName(c)}</th>`);
     head.push("</tr></thead><tbody>");
     const body = [];
     for (let r = 0; r < rows; r++) {
       const cls = ["row"];
       if (r === 0 && frozen) cls.push("frozen");
-      body.push(`<tr class="${cls.join(" ")}"><th class="rown${r === sel.r ? " on" : ""}">${r + 1}</th>`);
+      body.push(`<tr class="${cls.join(" ")}"><th class="rown${r >= box().r1 && r <= box().r2 ? " on" : ""}" data-row="${r}" title="Επιλογή γραμμής">${r + 1}</th>`);
       for (let c = 0; c < cols; c++) {
         const v = values[r][c];
         const k = [];
@@ -127,7 +134,11 @@
         if (sheet.raw(r, c).startsWith("=")) k.push("fx");
         if (inSel(r, c)) k.push("sel");
         if (r === sel.r && c === sel.c) k.push("active");
-        body.push(`<td data-r="${r}" data-c="${c}" class="${k.join(" ")}">${escapeHtml(E.display(v))}</td>`);
+        if (inPreview(r, c)) k.push("fillprev");
+        const b = box();
+        const handle = !editor && r === (fillTo ? Math.max(b.r2, fillTo.r) : b.r2) && c === (fillTo ? Math.max(b.c2, fillTo.c) : b.c2)
+          ? '<span class="fill-handle" title="Σύρετε για συμπλήρωση· διπλό κλικ ως το τέλος των δεδομένων"></span>' : "";
+        body.push(`<td data-r="${r}" data-c="${c}" class="${k.join(" ")}">${escapeHtml(E.display(v))}${handle}</td>`);
       }
       body.push("</tr>");
     }
@@ -137,6 +148,11 @@
     if (!editor || editor.viaBar !== true) bar.value = sheet.raw(sel.r, sel.c);
     $("[data-act=freeze]").setAttribute("aria-pressed", String(frozen));
     summary();
+  }
+  function inPreview(r, c) {
+    if (!fillTo) return false;
+    const b = box();
+    return r >= b.r1 && c >= b.c1 && r <= Math.max(b.r2, fillTo.r) && c <= Math.max(b.c2, fillTo.c) && !inSel(r, c);
   }
   function escapeHtml(s) {
     return s.replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
@@ -273,13 +289,16 @@
     }
     clip = { r: b.r1, c: b.c1, cells };
     const tsv = cells.map((row, i) => row.map((_, j) => E.display(values[b.r1 + i][b.c1 + j])).join("\t")).join("\n");
-    e.clipboardData.setData("text/plain", tsv);
-    e.preventDefault();
+    if (e) { e.clipboardData.setData("text/plain", tsv); e.preventDefault(); }
+    else if (navigator.clipboard) navigator.clipboard.writeText(tsv).catch(() => {});
+    clip.text = tsv;
     say("Αντιγράφηκε " + nameBox.textContent + ".");
   }
   function paste(e) {
-    const textData = e.clipboardData.getData("text/plain");
     e.preventDefault();
+    pasteText(e.clipboardData.getData("text/plain"));
+  }
+  function pasteText(textData) {
     const b = box();
     const mine = clip && clip.cells.map((row, i) => row.map((_, j) => E.display(values[clip.r + i] && values[clip.r + i][clip.c + j] !== undefined ? values[clip.r + i][clip.c + j] : null)).join("\t")).join("\n") === textData.replace(/\r/g, "").replace(/\n$/, "");
     const source = mine ? clip.cells : textData.replace(/\r/g, "").replace(/\n$/, "").split("\n").map(l => l.split("\t"));
@@ -327,7 +346,80 @@
     say(n ? `Συμπληρώθηκαν ${n} κελιά ως τη γραμμή ${r2 + 1}.` : "");
   }
 
+  // The fill handle, as in a spreadsheet: drag the selection down or across and
+  // formulas are copied with their references moved, text and single numbers
+  // repeat, and two or more numbers in a steady step continue as a series.
+  function series(cells) {
+    if (cells.length < 2) return null;
+    const xs = cells.map(t => E.literal(t));
+    if (!xs.every(x => typeof x === "number") || cells.some(t => t.startsWith("="))) return null;
+    const step = xs[1] - xs[0];
+    for (let i = 2; i < xs.length; i++) if (Math.abs(xs[i] - xs[i - 1] - step) > 1e-9) return null;
+    return { last: xs[xs.length - 1], step };
+  }
+  function dragFill(b, toR, toC) {
+    let n = 0;
+    const put = (r, c, t) => { if (sheet.raw(r, c) !== t) { sheet.set(r, c, t); n++; } };
+    const tidy = x => String(Math.round(x * 1e9) / 1e9);
+    if (toR > b.r2) {
+      const h = b.r2 - b.r1 + 1;
+      for (let c = b.c1; c <= b.c2; c++) {
+        const src = [];
+        for (let r = b.r1; r <= b.r2; r++) src.push(sheet.raw(r, c));
+        const run = series(src);
+        for (let r = b.r2 + 1; r <= toR; r++) {
+          const i = (r - b.r1) % h, from = b.r1 + i;
+          put(r, c, run ? tidy(run.last + run.step * (r - b.r2)) : E.shift(src[i], r - from, 0));
+        }
+      }
+    } else if (toC > b.c2) {
+      const w = b.c2 - b.c1 + 1;
+      for (let r = b.r1; r <= b.r2; r++) {
+        const src = [];
+        for (let c = b.c1; c <= b.c2; c++) src.push(sheet.raw(r, c));
+        const run = series(src);
+        for (let c = b.c2 + 1; c <= toC; c++) {
+          const i = (c - b.c1) % w, from = b.c1 + i;
+          put(r, c, run ? tidy(run.last + run.step * (c - b.c2)) : E.shift(src[i], 0, c - from));
+        }
+      }
+    } else return;
+    note({ kind: "fill", cell: E.cellName(b.r1, b.c1) + ":" + E.cellName(b.r2, b.c2), to: E.cellName(Math.max(toR, b.r2), Math.max(toC, b.c2)) });
+    sel = { r: b.r1, c: b.c1, r2: Math.max(toR, b.r2), c2: Math.max(toC, b.c2) };
+    save();
+    say(n ? `Συμπληρώθηκαν ${n} κελιά.` : "");
+  }
+
   // ---- rows and columns --------------------------------------------------
+  function insertColumn(at) {
+    sheet.insertColumn(at);
+    note({ kind: "addcol", cell: E.colName(at) });
+    sel = { r: 0, c: at, r2: 0, c2: at };
+    save(); render();
+    say("Νέα στήλη " + E.colName(at) + ". Γράψτε στο " + E.cellName(0, at) + " το όνομά της· οι τύποι προσαρμόστηκαν.");
+  }
+  function insertRow(at) {
+    if (at === 0) { say("Η 1η γραμμή είναι οι επικεφαλίδες· η νέα γραμμή μπαίνει από κάτω τους."); at = 1; }
+    sheet.insertRow(at);
+    note({ kind: "addrow", cell: String(at + 1) });
+    sel = { r: at, c: sel.c, r2: at, c2: sel.c };
+    save(); render();
+    say("Νέα γραμμή " + (at + 1) + "· οι τύποι προσαρμόστηκαν.");
+  }
+  function deleteColumns() {
+    const b = box();
+    if (b.c2 - b.c1 + 1 >= sheet.cols) { say("Δεν διαγράφονται όλες οι στήλες."); return; }
+    const names = [];
+    for (let c = b.c2; c >= b.c1; c--) {
+      names.unshift(E.colName(c) + (sheet.raw(0, c) ? " (" + sheet.raw(0, c) + ")" : ""));
+      sheet.deleteColumn(c);
+    }
+    note({ kind: "delcol", cols: names.join(", ") });
+    const c = Math.min(b.c1, sheet.cols - 1);
+    sel = { r: sel.r, c, r2: sel.r, c2: c };
+    save(); render();
+    say("Διαγράφηκε: στήλη " + names.join(", ") + ". Οι τύποι προσαρμόστηκαν.");
+  }
   function deleteRows() {
     const b = box();
     if (b.r1 === 0) { say("Η 1η γραμμή είναι οι επικεφαλίδες· δεν διαγράφεται."); return; }
@@ -355,6 +447,7 @@
       else if (e.kind === "delrow") li.textContent = `${e.at} · διαγραφή γραμμής ${e.rows}`;
       else if (e.kind === "fill") li.textContent = `${e.at} · συμπλήρωση από ${e.cell} ως ${e.to}`;
       else if (e.kind === "addcol") li.textContent = `${e.at} · νέα στήλη ${e.cell}`;
+      else if (e.kind === "delcol") li.textContent = `${e.at} · διαγραφή στήλης ${e.cols}`;
       else if (e.kind === "addrow") li.textContent = `${e.at} · νέα γραμμή ${e.cell}`;
       ol.appendChild(li);
     }
@@ -488,7 +581,58 @@
   }
 
   // ---- wiring ------------------------------------------------------------
+  // The column letters and row numbers select a whole column or row, Shift
+  // widens it, and the corner selects everything, as in a spreadsheet.
+  function headerOf(target) {
+    const th = target.closest("th");
+    if (!th) return null;
+    if (th.dataset.col !== undefined) return { col: Number(th.dataset.col) };
+    if (th.dataset.row !== undefined) return { row: Number(th.dataset.row) };
+    if (th.classList.contains("corner")) return { all: true };
+    return null;
+  }
+  function selectHeader(h, extend) {
+    const lastR = sheet.rows - 1, lastC = sheet.cols - 1;
+    if (h.all) sel = { r: 0, c: 0, r2: lastR, c2: lastC };
+    else if (h.col !== undefined) {
+      if (extend && sel.r === 0 && sel.r2 === lastR) sel.c2 = h.col;
+      else sel = { r: 0, c: h.col, r2: lastR, c2: h.col };
+    } else {
+      if (extend && sel.c === 0 && sel.c2 === lastC) sel.r2 = h.row;
+      else sel = { r: h.row, c: 0, r2: h.row, c2: lastC };
+    }
+    render();
+  }
   table.addEventListener("mousedown", e => {
+    const h = headerOf(e.target);
+    if (!h || pointing()) return;
+    if (editor) commit();
+    e.preventDefault();
+    const whole = h.col !== undefined ? sel.r === 0 && sel.r2 === sheet.rows - 1 && h.col >= Math.min(sel.c, sel.c2) && h.col <= Math.max(sel.c, sel.c2)
+      : h.row !== undefined ? sel.c === 0 && sel.c2 === sheet.cols - 1 && h.row >= Math.min(sel.r, sel.r2) && h.row <= Math.max(sel.r, sel.r2) : false;
+    // a right click inside a selected column or row keeps it, for the menu
+    if (e.button === 2 && whole) return;
+    selectHeader(h, e.shiftKey);
+    if (e.button === 0) { dragging = h.col !== undefined ? "cols" : h.row !== undefined ? "rows" : false; downAt = null; }
+    grid.focus({ preventScroll: true });
+  });
+  table.addEventListener("mouseover", e => {
+    if (!(e.buttons & 1) || (dragging !== "cols" && dragging !== "rows")) return;
+    const h = headerOf(e.target);
+    if (dragging === "cols" && h && h.col !== undefined && sel.c2 !== h.col) { sel.c2 = h.col; render(); }
+    if (dragging === "rows" && h && h.row !== undefined && sel.r2 !== h.row) { sel.r2 = h.row; render(); }
+  });
+
+  table.addEventListener("mousedown", e => {
+    if (headerOf(e.target)) return;
+    if (e.target.classList.contains("fill-handle")) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (editor) commit();
+      dragging = "fill";
+      fillTo = { r: box().r2, c: box().c2 };
+      return;
+    }
     const cell = e.target.closest("td");
     if (!cell || e.target.classList.contains("sheet-edit")) return;
     const r = Number(cell.dataset.r), c = Number(cell.dataset.c);
@@ -500,25 +644,58 @@
       return;
     }
     if (editor) commit();
+    if (e.button !== 0) return;  // the right button opens the menu, see below
     e.preventDefault();
     if (e.shiftKey) { sel.r2 = r; sel.c2 = c; } else sel = { r, c, r2: r, c2: c };
     dragging = "select";
+    downAt = { x: e.clientX, y: e.clientY };
     render();
     grid.focus({ preventScroll: true });
   });
   table.addEventListener("mouseover", e => {
-    if (!dragging) return;
+    if (!dragging || !(e.buttons & 1)) return;
+    if (dragging === "select" && downAt && Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) < 4) return;
     const cell = e.target.closest("td");
     if (!cell) return;
     const r = Number(cell.dataset.r), c = Number(cell.dataset.c);
     if (dragging === "pick" && editor) { pick(r, c, true); return; }
+    if (dragging === "fill") {
+      const b = box();
+      // one direction at a time, whichever the pointer has gone further in
+      const down = r - b.r2, across = c - b.c2;
+      const next = down >= across ? { r: Math.max(b.r2, r), c: b.c2 } : { r: b.r2, c: Math.max(b.c2, c) };
+      if (!fillTo || next.r !== fillTo.r || next.c !== fillTo.c) { fillTo = next; render(); }
+      return;
+    }
     if (dragging === "select" && (sel.r2 !== r || sel.c2 !== c)) { sel.r2 = r; sel.c2 = c; render(); }
   });
   document.addEventListener("mouseup", () => {
+    if (dragging === "fill") {
+      const to = fillTo;
+      const b = box();
+      fillTo = null;
+      dragging = false;
+      // a click on the handle that went nowhere leaves the grid as it is, so
+      // the second click of a double click lands on the same handle
+      if (!to || (to.r === b.r2 && to.c === b.c2)) return;
+      dragFill(b, to.r, to.c);
+      render();
+      grid.focus({ preventScroll: true });
+      return;
+    }
     if (dragging === "pick" && editor) editor.input.focus();
     dragging = false;
   });
-  table.addEventListener("dblclick", e => { if (e.target.closest("td") && !editor) startEdit(); });
+  table.addEventListener("dblclick", e => {
+    if (e.target.classList.contains("fill-handle")) {
+      // down to the last row holding data, as a double click on Excel's handle does
+      const b = box();
+      const last = lastFilledRow();
+      if (last > b.r2) { dragFill(b, last, b.c2); render(); }
+      return;
+    }
+    if (e.target.closest("td") && !editor) startEdit();
+  });
 
   grid.addEventListener("keydown", e => {
     if (editor) return;
@@ -534,6 +711,79 @@
   });
   grid.addEventListener("copy", e => { if (!editor) copy(e); });
   grid.addEventListener("paste", e => { if (!editor) paste(e); });
+  grid.addEventListener("cut", e => { if (!editor) { copy(e); clearSelection(); } });
+
+  // ---- the right-click menu ----------------------------------------------
+  const menu = document.createElement("div");
+  menu.className = "sheet-menu";
+  menu.setAttribute("role", "menu");
+  menu.hidden = true;
+  const ITEMS = [
+    ["cut", "Αποκοπή", "Ctrl+X"], ["copy", "Αντιγραφή", "Ctrl+C"], ["paste", "Επικόλληση", "Ctrl+V"], null,
+    ["rowAbove", "Εισαγωγή γραμμής από πάνω"], ["rowBelow", "Εισαγωγή γραμμής από κάτω"],
+    ["colLeft", "Εισαγωγή στήλης αριστερά"], ["colRight", "Εισαγωγή στήλης δεξιά"], null,
+    ["delRow", "Διαγραφή γραμμής"], ["delCol", "Διαγραφή στήλης"], ["clear", "Καθαρισμός περιεχομένων", "Delete"], null,
+    ["fill", "Συμπλήρωση προς τα κάτω", "Ctrl+D"], ["chart", "Γράφημα αυτής της στήλης"],
+  ];
+  menu.innerHTML = ITEMS.map(it => (it
+    ? `<button type="button" role="menuitem" data-menu="${it[0]}"><span>${it[1]}</span><kbd>${it[2] || ""}</kbd></button>`
+    : "<hr>")).join("");
+  dock.appendChild(menu);
+  function closeMenu() { menu.hidden = true; }
+  table.addEventListener("contextmenu", e => {
+    const cell = e.target.closest("td");
+    const head = headerOf(e.target);
+    if (!cell && !head) return;
+    e.preventDefault();
+    if (editor) commit();
+    if (cell) {
+      const r = Number(cell.dataset.r), c = Number(cell.dataset.c);
+      if (!inSel(r, c)) { sel = { r, c, r2: r, c2: c }; render(); }
+    }
+    menu.querySelector("[data-menu=paste]").disabled = !clip && !(navigator.clipboard && navigator.clipboard.readText);
+    menu.hidden = false;
+    const w = menu.offsetWidth, h = menu.offsetHeight;
+    menu.style.left = Math.min(e.clientX, window.innerWidth - w - 4) + "px";
+    menu.style.top = Math.max(4, Math.min(e.clientY, window.innerHeight - h - 4)) + "px";
+    menu.querySelector("button").focus();
+  });
+  menu.addEventListener("click", async e => {
+    const btn = e.target.closest("button[data-menu]");
+    if (!btn) return;
+    closeMenu();
+    const b = box();
+    switch (btn.dataset.menu) {
+      case "cut": copy(); clearSelection(); break;
+      case "copy": copy(); break;
+      case "paste": {
+        let t = clip && clip.text;
+        try { if (navigator.clipboard && navigator.clipboard.readText) t = await navigator.clipboard.readText(); }
+        catch (refused) { /* no clipboard permission: use what this sheet copied */ }
+        if (t) pasteText(t); else say("Δεν υπάρχει κάτι για επικόλληση.");
+        break;
+      }
+      case "rowAbove": insertRow(b.r1); break;
+      case "rowBelow": insertRow(b.r2 + 1); break;
+      case "colLeft": insertColumn(b.c1); break;
+      case "colRight": insertColumn(b.c2 + 1); break;
+      case "delRow": deleteRows(); break;
+      case "delCol": deleteColumns(); break;
+      case "clear": clearSelection(); break;
+      case "fill": fillDown(); break;
+      case "chart": openChart(); break;
+    }
+    grid.focus({ preventScroll: true });
+  });
+  menu.addEventListener("keydown", e => {
+    const items = Array.from(menu.querySelectorAll("button:not(:disabled)"));
+    const i = items.indexOf(document.activeElement);
+    if (e.key === "Escape") { e.preventDefault(); closeMenu(); grid.focus(); }
+    else if (e.key === "ArrowDown") { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+  });
+  document.addEventListener("mousedown", e => { if (!menu.hidden && !menu.contains(e.target)) closeMenu(); });
+  grid.addEventListener("scroll", closeMenu);
+  window.addEventListener("blur", closeMenu);
 
   bar.addEventListener("focus", () => { if (editor) { editor.viaBar = true; } });
   bar.addEventListener("input", () => { if (editor) editor.input.value = bar.value; });
@@ -549,18 +799,8 @@
     if (editor) commit();
     switch (btn.dataset.act) {
       case "fill": fillDown(); break;
-      case "addcol":
-        sheet.addColumn();
-        note({ kind: "addcol", cell: E.colName(sheet.cols - 1) });
-        sel = { r: 0, c: sheet.cols - 1, r2: 0, c2: sheet.cols - 1 };
-        save(); render(); say("Νέα στήλη " + E.colName(sheet.cols - 1) + ". Γράψτε στο κελί " + E.cellName(0, sheet.cols - 1) + " το όνομά της.");
-        break;
-      case "addrow":
-        sheet.addRow();
-        note({ kind: "addrow", cell: String(sheet.rows) });
-        sel = { r: sheet.rows - 1, c: 0, r2: sheet.rows - 1, c2: 0 };
-        save(); render();
-        break;
+      case "addcol": insertColumn(box().c2 + 1); break;
+      case "addrow": insertRow(box().r2 + 1); break;
       case "delrow": deleteRows(); break;
       case "freeze": frozen = !frozen; save(); render(); break;
       case "chart": openChart(); break;
