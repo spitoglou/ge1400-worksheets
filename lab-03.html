@@ -46,11 +46,11 @@
 <h1 id="εργαστηριο-03---φυλλο-εργασιασ">📝 ΕΡΓΑΣΤΗΡΙΟ 03 - ΦΥΛΛΟ
 ΕΡΓΑΣΙΑΣ</h1>
 <p><strong>Ονοματεπώνυμο:</strong>
-<input type="text" class="ws-line" name="f011" style="width:13em" autocomplete="off">
+<input type="text" class="ws-line" name="f005" style="width:13em" autocomplete="off">
 <strong>ΑΜ:</strong>
-<input type="text" class="ws-line" name="f012" style="width:6em" autocomplete="off">
+<input type="text" class="ws-line" name="f006" style="width:6em" autocomplete="off">
 <strong>Ημ/νία:</strong>
-<input type="text" class="ws-line" name="f013" style="width:5em" autocomplete="off"></p>
+<input type="text" class="ws-line" name="f007" style="width:5em" autocomplete="off"></p>
 <blockquote>
 <p>Δεδομένα, ποιότητα &amp; περιγραφική ανάλυση σε λογιστικό φύλλο. ⚠️
 Δουλεύουμε <strong>μόνο</strong> με το πλασματικό σύνολο δεδομένων
@@ -62,12 +62,32 @@
 </blockquote>
 <hr />
 <h2 id="προθερμανση">🔥 ΠΡΟΘΕΡΜΑΝΣΗ</h2>
-<ol type="1">
-<li><p>Γιατί τα δεδομένα υγείας θεωρούνται «ευαίσθητα»;
-<textarea class="ws-box" name="pb003" rows="2"></textarea></p></li>
-<li><p>Ένα παράδειγμα «κακού» δεδομένου (garbage in):
-<textarea class="ws-box" name="pb004" rows="2"></textarea></p></li>
-</ol>
+<p>Σημειώστε <strong>μία</strong> απάντηση σε κάθε ερώτηση.</p>
+<p><strong>1. Γιατί τα δεδομένα υγείας θεωρούνται
+«ευαίσθητα»;</strong></p>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t015"> Επειδή είναι
+κυρίως αριθμοί και η επεξεργασία τους είναι δύσκολη.</li>
+<li><input type="checkbox" class="ws-tick" name="t016"> Επειδή
+αποκαλύπτουν την υγεία ενός προσώπου και μια διαρροή μπορεί να το βλάψει
+(ειδική κατηγορία στον GDPR).</li>
+<li><input type="checkbox" class="ws-tick" name="t017"> Επειδή ανήκουν
+στο νοσοκομείο και όχι στον ασθενή.</li>
+<li><input type="checkbox" class="ws-tick" name="t018"> Επειδή αλλάζουν
+συχνά και παλιώνουν γρήγορα.</li>
+</ul>
+<p><strong>2. Ποιο είναι παράδειγμα «κακού» δεδομένου (garbage
+in);</strong></p>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t019"> Βάρος ενήλικα 72
+kg.</li>
+<li><input type="checkbox" class="ws-tick" name="t020"> Ύψος ενήλικα 17
+cm.</li>
+<li><input type="checkbox" class="ws-tick" name="t021"> Ηλικία 45
+έτη.</li>
+<li><input type="checkbox" class="ws-tick" name="t022"> Ο κωδικός P03
+στη θέση του ονόματος.</li>
+</ul>
 <hr />
 <h2 id="εργαλεια---ανοιξτε-τα">🔖 ΕΡΓΑΛΕΙΑ - ΑΝΟΙΞΤΕ ΤΑ</h2>
 <table>
@@ -86,19 +106,19 @@
 <td>Υπολογιστικό φύλλο της σελίδας των φύλλων εργασίας
 (https://spitoglou.github.io/ge1400-worksheets/), ή Excel / LibreOffice
 Calc / Google Sheets</td>
-<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c019"></td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c013"></td>
 </tr>
 <tr>
 <td>Αρχείο <code>diatrofika_dedomena_deigma.csv</code> (φορτώνεται μόνο
 του στο υπολογιστικό φύλλο της σελίδας· και στο e-class)</td>
-<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c020"></td>
+<td style="text-align: center;"><input type="checkbox" class="ws-tick" name="c014"></td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="ασκηση-1---σχεδιασμός-φόρμας">ΑΣΚΗΣΗ 1 - Σχεδιασμός φόρμας</h2>
-<p>Συμπληρώστε τον πίνακα σχεδιασμού. Για κάθε πεδίο: μονάδα &amp; ένα
-λογικό εύρος.</p>
+<p>Συμπληρώστε τον πίνακα σχεδιασμού: σε κάθε γραμμή λείπει <strong>είτε
+η μονάδα είτε ένα λογικό εύρος</strong>.</p>
 <table>
 <colgroup>
 <col style="width: 22%" />
@@ -125,7 +145,7 @@ Calc / Google Sheets</td>
 <td>Ηλικία</td>
 <td>αριθμός</td>
 <td>έτη</td>
-<td><textarea class="ws-cell" name="tc034" rows="2"></textarea></td>
+<td><textarea class="ws-cell" name="tc059" rows="2"></textarea></td>
 </tr>
 <tr>
 <td>Φύλο</td>
@@ -136,173 +156,195 @@ Calc / Google Sheets</td>
 <tr>
 <td>Βάρος</td>
 <td>αριθμός</td>
-<td><textarea class="ws-cell" name="tc035" rows="2"></textarea></td>
-<td><textarea class="ws-cell" name="tc036" rows="2"></textarea></td>
+<td><textarea class="ws-cell" name="tc060" rows="2"></textarea></td>
+<td>30 - 250</td>
 </tr>
 <tr>
 <td>Ύψος</td>
 <td>αριθμός</td>
-<td><textarea class="ws-cell" name="tc037" rows="2"></textarea></td>
-<td><textarea class="ws-cell" name="tc038" rows="2"></textarea></td>
+<td>cm</td>
+<td><textarea class="ws-cell" name="tc061" rows="2"></textarea></td>
 </tr>
 <tr>
 <td>Περιφέρεια μέσης</td>
 <td>αριθμός</td>
-<td><textarea class="ws-cell" name="tc039" rows="2"></textarea></td>
-<td><textarea class="ws-cell" name="tc040" rows="2"></textarea></td>
+<td><textarea class="ws-cell" name="tc062" rows="2"></textarea></td>
+<td>50 - 180</td>
 </tr>
 <tr>
 <td>Ενέργεια</td>
 <td>αριθμός</td>
-<td><textarea class="ws-cell" name="tc041" rows="2"></textarea></td>
-<td><textarea class="ws-cell" name="tc042" rows="2"></textarea></td>
+<td>kcal</td>
+<td><textarea class="ws-cell" name="tc063" rows="2"></textarea></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Γιατί κωδικός αντί ονόματος;</strong>
-<textarea class="ws-box" name="pb005" rows="2"></textarea></p>
+<p><strong>Γιατί κωδικός αντί ονόματος;</strong> (σημειώστε μία)</p>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t023"> Για να πιάνει
+λιγότερο χώρο ο πίνακας.</li>
+<li><input type="checkbox" class="ws-tick" name="t024"> Για να μη
+φαίνεται ποιος είναι ο ασθενής: ψευδωνυμοποίηση και ελαχιστοποίηση
+δεδομένων.</li>
+<li><input type="checkbox" class="ws-tick" name="t025"> Επειδή το
+υπολογιστικό φύλλο δεν δέχεται ελληνικούς χαρακτήρες.</li>
+<li><input type="checkbox" class="ws-tick" name="t026"> Για να
+ταξινομούνται οι γραμμές αλφαβητικά.</li>
+</ul>
 <hr />
 <h2 id="ασκηση-2---οργάνωση-δεδομένων">ΑΣΚΗΣΗ 2 - Οργάνωση
 δεδομένων</h2>
 <ul>
-<li><input type="checkbox" class="ws-tick" name="t021"> Άνοιξα το CSV·
+<li><input type="checkbox" class="ws-tick" name="t027"> Άνοιξα το CSV·
 εμφανίζεται σε <strong>7 στήλες</strong>.</li>
-<li><input type="checkbox" class="ws-tick" name="t022"> Επιβεβαίωσα
+<li><input type="checkbox" class="ws-tick" name="t028"> Επιβεβαίωσα
 «tidy»: μία μεταβλητή/στήλη, ένας ασθενής/γραμμή.</li>
-<li><input type="checkbox" class="ws-tick" name="t023"> Πάγωσα την πρώτη
+<li><input type="checkbox" class="ws-tick" name="t029"> Πάγωσα την πρώτη
 γραμμή.</li>
 </ul>
 <p><strong>Πόσες γραμμές δεδομένων υπάρχουν (εκτός
 επικεφαλίδας);</strong>
-<input type="text" class="ws-line" name="f014" style="width:5em" autocomplete="off"></p>
+<input type="text" class="ws-line" name="f008" style="width:5em" autocomplete="off"></p>
 <hr />
 <h2 id="ασκηση-3---περιγραφικά-μέτρα-γράφημα">ΑΣΚΗΣΗ 3 - Περιγραφικά
 μέτρα &amp; γράφημα</h2>
-<p>Για τη στήλη <strong>Βάρος_kg</strong>, υπολογίστε (γράψτε τύπο &amp;
-αποτέλεσμα):</p>
-<table style="width:99%;">
+<p>Για τη στήλη <strong>Βάρος_kg</strong>, γράψτε τον τύπο σε ένα κενό
+κελί και σημειώστε το αποτέλεσμα:</p>
+<table>
 <colgroup>
-<col style="width: 17%" />
-<col style="width: 54%" />
 <col style="width: 27%" />
+<col style="width: 29%" />
+<col style="width: 42%" />
 </colgroup>
 <thead>
 <tr>
 <th>Μέτρο</th>
-<th>Τύπος (π.χ. <code>=AVERAGE(D2:D17)</code>)</th>
+<th>Τύπος</th>
 <th style="text-align: center;">Αποτέλεσμα</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Μέσος</td>
-<td><textarea class="ws-cell" name="tc043" rows="2"></textarea></td>
-<td style="text-align: center;"><textarea class="ws-cell" name="tc044" rows="2"></textarea></td>
+<td><code>=AVERAGE(D2:D17)</code></td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc064" rows="2"></textarea></td>
 </tr>
 <tr>
 <td>Διάμεσος</td>
-<td><textarea class="ws-cell" name="tc045" rows="2"></textarea></td>
-<td style="text-align: center;"><textarea class="ws-cell" name="tc046" rows="2"></textarea></td>
+<td><code>=MEDIAN(D2:D17)</code></td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc065" rows="2"></textarea></td>
 </tr>
 <tr>
 <td>Τυπική απόκλιση</td>
-<td><textarea class="ws-cell" name="tc047" rows="2"></textarea></td>
-<td style="text-align: center;"><textarea class="ws-cell" name="tc048" rows="2"></textarea></td>
+<td><code>=STDEV.S(D2:D17)</code></td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc066" rows="2"></textarea></td>
 </tr>
 <tr>
 <td>Ελάχιστο</td>
-<td><textarea class="ws-cell" name="tc049" rows="2"></textarea></td>
-<td style="text-align: center;"><textarea class="ws-cell" name="tc050" rows="2"></textarea></td>
+<td><code>=MIN(D2:D17)</code></td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc067" rows="2"></textarea></td>
 </tr>
 <tr>
 <td>Μέγιστο</td>
-<td><textarea class="ws-cell" name="tc051" rows="2"></textarea></td>
-<td style="text-align: center;"><textarea class="ws-cell" name="tc052" rows="2"></textarea></td>
+<td><code>=MAX(D2:D17)</code></td>
+<td style="text-align: center;"><textarea class="ws-cell" name="tc068" rows="2"></textarea></td>
 </tr>
 </tbody>
 </table>
 <ul>
-<li><input type="checkbox" class="ws-tick" name="t024"> Έφτιαξα
+<li><input type="checkbox" class="ws-tick" name="t030"> Έφτιαξα
 <strong>γράφημα</strong> (ιστόγραμμα/ραβδόγραμμα) του βάρους.</li>
 </ul>
 <p><strong>🚀 Προχωρημένη:</strong> στήλη ΔΜΣ
 <code>=Βάρος/(Ύψος/100)^2</code>. Πόσοι έχουν ΔΜΣ&gt;30;
-<input type="text" class="ws-line" name="f015" style="width:5em" autocomplete="off"></p>
+<input type="text" class="ws-line" name="f009" style="width:5em" autocomplete="off"></p>
 <hr />
 <h2 id="ασκηση-4---έλεγχος-ποιότητας">ΑΣΚΗΣΗ 4 - Έλεγχος ποιότητας</h2>
-<p>Εντοπίστε <strong>τέσσερα</strong> προβλήματα ποιότητας (ID + τι
-συμβαίνει):</p>
-<table>
-<colgroup>
-<col style="width: 8%" />
-<col style="width: 45%" />
-<col style="width: 45%" />
-</colgroup>
-<thead>
-<tr>
-<th>#</th>
-<th>ID</th>
-<th>Πρόβλημα</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td><textarea class="ws-cell" name="tc053" rows="2"></textarea></td>
-<td><textarea class="ws-cell" name="tc054" rows="2"></textarea></td>
-</tr>
-<tr>
-<td>2</td>
-<td><textarea class="ws-cell" name="tc055" rows="2"></textarea></td>
-<td><textarea class="ws-cell" name="tc056" rows="2"></textarea></td>
-</tr>
-<tr>
-<td>3</td>
-<td><textarea class="ws-cell" name="tc057" rows="2"></textarea></td>
-<td><textarea class="ws-cell" name="tc058" rows="2"></textarea></td>
-</tr>
-<tr>
-<td>4</td>
-<td><textarea class="ws-cell" name="tc059" rows="2"></textarea></td>
-<td><textarea class="ws-cell" name="tc060" rows="2"></textarea></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Ερώτηση κριτικής σκέψης:</strong> Το βάρος 145 kg - το
-διαγράφετε αμέσως; Γιατί / γιατί όχι;</p>
-<p><textarea class="ws-box" name="ans002" rows="4"></textarea></p>
+<p>Ελέγξτε το αρχείο και σημειώστε <strong>τα τέσσερα</strong> που είναι
+πραγματικά προβλήματα ποιότητας:</p>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t031">
+<strong>P01:</strong> δεν υπάρχει το όνομα του ασθενούς.</li>
+<li><input type="checkbox" class="ws-tick" name="t032">
+<strong>P03:</strong> ενέργεια 2450 kcal, τιμή αδύνατη για ενήλικα.</li>
+<li><input type="checkbox" class="ws-tick" name="t033">
+<strong>P05:</strong> εμφανίζεται δύο φορές (διπλότυπο).</li>
+<li><input type="checkbox" class="ws-tick" name="t034">
+<strong>P07:</strong> ύψος 17 cm, πιθανό λάθος πληκτρολόγησης ή
+μονάδας.</li>
+<li><input type="checkbox" class="ws-tick" name="t035">
+<strong>P10:</strong> λείπει η περιφέρεια μέσης (missing).</li>
+<li><input type="checkbox" class="ws-tick" name="t036">
+<strong>P12:</strong> βάρος 145 kg, ακραία τιμή (outlier).</li>
+<li><input type="checkbox" class="ws-tick" name="t037">
+<strong>P14:</strong> ηλικία 58 έτη, εκτός λογικού εύρους.</li>
+</ul>
+<p><strong>Ερώτηση κριτικής σκέψης:</strong> Το βάρος 145 kg το
+διαγράφετε αμέσως; (σημειώστε μία)</p>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t038"> Ναι· κάθε ακραία
+τιμή είναι λάθος και διαγράφεται.</li>
+<li><input type="checkbox" class="ws-tick" name="t039"> Ναι· αλλιώς ο
+μέσος όρος βγαίνει μεγαλύτερος.</li>
+<li><input type="checkbox" class="ws-tick" name="t040"> Όχι· πρώτα
+ελέγχεται (πηγή, ΔΜΣ, άλλες μετρήσεις), γιατί μπορεί να είναι πραγματική
+τιμή.</li>
+<li><input type="checkbox" class="ws-tick" name="t041"> Όχι· τα δεδομένα
+μιας μελέτης δεν αλλάζουν ποτέ.</li>
+</ul>
 <hr />
 <h2 id="ολοκληρωμενη-ασκηση">🎯 ΟΛΟΚΛΗΡΩΜΕΝΗ ΑΣΚΗΣΗ</h2>
 <p>Φτιάξτε ένα «καθαρό» αντίγραφο και τεκμηριώστε τις αλλαγές:</p>
 <ul>
-<li><input type="checkbox" class="ws-tick" name="t025"> Διόρθωσα το ύψος
+<li><input type="checkbox" class="ws-tick" name="t042"> Διόρθωσα το ύψος
 του <strong>P07</strong> (υπόθεση:
-<input type="text" class="ws-line" name="f016" style="width:6em" autocomplete="off">
+<input type="text" class="ws-line" name="f010" style="width:6em" autocomplete="off">
 cm) · σημείωσα την αλλαγή.</li>
-<li><input type="checkbox" class="ws-tick" name="t026"> Αφαίρεσα το
+<li><input type="checkbox" class="ws-tick" name="t043"> Αφαίρεσα το
 διπλότυπο <strong>P05</strong>.</li>
-<li><input type="checkbox" class="ws-tick" name="t027"> Σημείωσα το
+<li><input type="checkbox" class="ws-tick" name="t044"> Σημείωσα το
 missing (<strong>P10</strong>) · επισήμανα το outlier
 (<strong>P12</strong>).</li>
 </ul>
 <p><strong>Μετά το καθάρισμα - Βάρος:</strong> Μέσος =
-<input type="text" class="ws-line" name="f017" style="width:5em" autocomplete="off">
+<input type="text" class="ws-line" name="f011" style="width:5em" autocomplete="off">
 Διάμεσος =
-<input type="text" class="ws-line" name="f018" style="width:5em" autocomplete="off"></p>
-<p><strong>Ένα συμπέρασμα (1 πρόταση):</strong>
-<textarea class="ws-box" name="pb006" rows="2"></textarea></p>
+<input type="text" class="ws-line" name="f012" style="width:5em" autocomplete="off"></p>
+<p><strong>Ποιο συμπέρασμα στηρίζεται στα αποτελέσματα μετά το
+καθάρισμα;</strong> (σημειώστε μία)</p>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t045"> Ο μέσος είναι
+μεγαλύτερος από τη διάμεσο, γιατί η ακραία τιμή του P12 τον «τραβά» προς
+τα πάνω.</li>
+<li><input type="checkbox" class="ws-tick" name="t046"> Ο μέσος και η
+διάμεσος συμπίπτουν, άρα δεν υπάρχουν ακραίες τιμές.</li>
+<li><input type="checkbox" class="ws-tick" name="t047"> Η διάμεσος
+επηρεάζεται από την ακραία τιμή περισσότερο από τον μέσο.</li>
+<li><input type="checkbox" class="ws-tick" name="t048"> Όλοι οι
+συμμετέχοντες έχουν φυσιολογικό βάρος.</li>
+</ul>
 <p><strong>Γιατί κρατάμε ίχνος (log) των αλλαγών μας;</strong>
-<textarea class="ws-box" name="pb007" rows="2"></textarea></p>
+(σημειώστε μία)</p>
+<ul>
+<li><input type="checkbox" class="ws-tick" name="t049"> Για να μπορεί
+κάποιος να ελέγξει και να επαναλάβει τι αλλάξαμε και γιατί.</li>
+<li><input type="checkbox" class="ws-tick" name="t050"> Για να μεγαλώνει
+το αρχείο με χρήσιμες πληροφορίες.</li>
+<li><input type="checkbox" class="ws-tick" name="t051"> Επειδή το
+απαιτεί το υπολογιστικό φύλλο.</li>
+<li><input type="checkbox" class="ws-tick" name="t052"> Για να μη
+χρειαστούμε ξανά το αρχικό αρχείο.</li>
+</ul>
 <hr />
 <h2 id="αυτοαξιολογηση">✅ ΑΥΤΟΑΞΙΟΛΟΓΗΣΗ</h2>
 <ul>
-<li><input type="checkbox" class="ws-tick" name="t028"> Οργανώνω
+<li><input type="checkbox" class="ws-tick" name="t053"> Οργανώνω
 δεδομένα κατά «tidy data».</li>
-<li><input type="checkbox" class="ws-tick" name="t029"> Υπολογίζω
+<li><input type="checkbox" class="ws-tick" name="t054"> Υπολογίζω
 περιγραφικά μέτρα σε υπολογιστικό φύλλο.</li>
-<li><input type="checkbox" class="ws-tick" name="t030"> Εντοπίζω
+<li><input type="checkbox" class="ws-tick" name="t055"> Εντοπίζω
 missing, outliers, σφάλματα, διπλότυπα.</li>
-<li><input type="checkbox" class="ws-tick" name="t031"> Εξηγώ γιατί
+<li><input type="checkbox" class="ws-tick" name="t056"> Εξηγώ γιατί
 χρησιμοποιούμε ανωνυμοποιημένα δεδομένα.</li>
 </ul>
 <hr />
@@ -311,19 +353,19 @@ missing, outliers, σφάλματα, διπλότυπα.</li>
 <ol type="1">
 <li><p>Μέσος <strong>ή</strong> διάμεσος με ένα ακραίο βάρος 145 kg -
 ποιο &amp; γιατί;</p>
-<p><textarea class="ws-box" name="ib008" rows="2"></textarea></p></li>
+<p><textarea class="ws-box" name="ib002" rows="2"></textarea></p></li>
 <li><p>Ένα πράγμα που <strong>δυσκολεύτηκα</strong> στο υπολογιστικό
 φύλλο:
-<textarea class="ws-box" name="pb009" rows="2"></textarea></p></li>
+<textarea class="ws-box" name="pb003" rows="2"></textarea></p></li>
 <li><p>Μία αρχή GDPR που εφάρμοσα σήμερα:
-<textarea class="ws-box" name="pb010" rows="2"></textarea></p></li>
+<textarea class="ws-box" name="pb004" rows="2"></textarea></p></li>
 </ol>
 <hr />
 <h2 id="προετοιμασια-για-διαλεξη-4">📅 ΠΡΟΕΤΟΙΜΑΣΙΑ ΓΙΑ ΔΙΑΛΕΞΗ 4</h2>
 <ul>
-<li><input type="checkbox" class="ws-tick" name="t032"> Μελετήστε τις
+<li><input type="checkbox" class="ws-tick" name="t057"> Μελετήστε τις
 σημειώσεις της Διάλεξης 3 (e-class).</li>
-<li><input type="checkbox" class="ws-tick" name="t033"> Σκεφτείτε: πώς
+<li><input type="checkbox" class="ws-tick" name="t058"> Σκεφτείτε: πώς
 «ταξιδεύει» η πληροφορία ενός ασθενούς μέσα σε ένα νοσοκομείο;</li>
 </ul>
 <hr />
@@ -334,7 +376,7 @@ missing, outliers, σφάλματα, διπλότυπα.</li>
   </form>
 </main>
 
-<script>window.WORKSHEET = {"slug": "ge1400", "lab": 3, "pdf": "forms/lab-03.pdf?v=21ab90b6fbed", "filename": "Εργαστηριο_03_Φυλλο_Εργασιας_Φοιτητη_ΦΟΡΜΑ.pdf", "version": "21ab90b6fbed", "sheet": {"csv": "data/lab-03/diatrofika_dedomena_deigma.csv?v=f962bdb341dd", "name": "diatrofika_dedomena_deigma.csv", "version": "f962bdb341dd"}};</script>
+<script>window.WORKSHEET = {"slug": "ge1400", "lab": 3, "pdf": "forms/lab-03.pdf?v=507c93ff6865", "filename": "Εργαστηριο_03_Φυλλο_Εργασιας_Φοιτητη_ΦΟΡΜΑ.pdf", "version": "507c93ff6865", "sheet": {"csv": "data/lab-03/diatrofika_dedomena_deigma.csv?v=f962bdb341dd", "name": "diatrofika_dedomena_deigma.csv", "version": "f962bdb341dd"}};</script>
 <script src="assets/pdf-lib.min.js"></script>
 <script src="assets/fontkit.umd.min.js"></script>
 <script src="assets/app.js"></script>
