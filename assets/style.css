@@ -191,3 +191,9 @@ figure.screencast figcaption { font-size: 0.9rem; color: var(--grey); margin-top
 .sheet-menu hr { margin: 4px 0; border: 0; border-top: 1px solid #e3e3e3; }
 .sheet-grid thead th.col, .sheet-grid th.rown, .sheet-grid th.corner { cursor: pointer; }
 .sheet-grid thead th.col:hover, .sheet-grid th.rown:hover { background: #D5E1EC; }
+.chart-notes { padding: 0 12px 12px; font-size: 0.85rem; }
+.chart-notes table.box-stats { display: table; width: auto; margin: 4px 0; }
+.chart-notes table.box-stats th, .chart-notes table.box-stats td { padding: 3px 8px; }
+.chart-notes table.box-stats td:not(:first-child) { text-align: right; }
+.box-note { color: var(--grey); margin: 6px 0 0; }
+.sheet-chart { max-height: 94vh; overflow: auto; }

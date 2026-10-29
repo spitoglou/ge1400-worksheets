@@ -283,6 +283,14 @@
     const n = s.length;
     return n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2;
   }
+  // Excel's QUARTILE.INC and PERCENTILE.INC: rank (n - 1)p, interpolated.
+  function quantile(xs, p) {
+    if (!xs.length) throw err("#NUM!");
+    if (p < 0 || p > 1) throw err("#NUM!");
+    const s = xs.slice().sort((a, b) => a - b);
+    const h = (s.length - 1) * p, lo = Math.floor(h);
+    return lo + 1 < s.length ? s[lo] + (h - lo) * (s[lo + 1] - s[lo]) : s[lo];
+  }
   function variance(xs, sample) {
     const n = xs.length;
     if (n < (sample ? 2 : 1)) throw err("#DIV/0!");
@@ -307,6 +315,10 @@
     SUM: a => numbers(a).reduce((x, y) => x + y, 0),
     AVERAGE: a => mean(numbers(a)),
     MEDIAN: a => { const xs = numbers(a); if (!xs.length) throw err("#NUM!"); return median(xs); },
+    QUARTILE: a => { const q = Math.trunc(toNumber(a[1])); if (q < 0 || q > 4) throw err("#NUM!"); return quantile(numbers([a[0]]), q / 4); },
+    "QUARTILE.INC": a => { const q = Math.trunc(toNumber(a[1])); if (q < 0 || q > 4) throw err("#NUM!"); return quantile(numbers([a[0]]), q / 4); },
+    PERCENTILE: a => quantile(numbers([a[0]]), toNumber(a[1])),
+    "PERCENTILE.INC": a => quantile(numbers([a[0]]), toNumber(a[1])),
     MIN: a => { const xs = numbers(a); return xs.length ? Math.min(...xs) : 0; },
     MAX: a => { const xs = numbers(a); return xs.length ? Math.max(...xs) : 0; },
     STDEV: a => Math.sqrt(variance(numbers(a), true)),
@@ -580,7 +592,7 @@
     return String(v);
   }
 
-  const api = { Sheet, SheetError, isErr, parseCsv, toCsv, display, shift, colName, colIndex,
+  const api = { quantile: (xs, p) => quantile(xs, p), Sheet, SheetError, isErr, parseCsv, toCsv, display, shift, colName, colIndex,
                 cellName, literal, normalise, FUNCTION_NAMES };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.SheetEngine = api;

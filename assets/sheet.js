@@ -466,9 +466,12 @@
       <label>Στήλη <select class="chart-col"></select></label>
       <label><input type="radio" name="chart-kind" value="hist" checked> Ιστόγραμμα</label>
       <label><input type="radio" name="chart-kind" value="bar"> Ραβδόγραμμα ανά γραμμή</label>
+      <label><input type="radio" name="chart-kind" value="box"> Θηκόγραμμα</label>
+      <label class="chart-group-label">Ομάδες <select class="chart-group"></select></label>
       <label class="chart-bins-label">Διαστήματα <input type="number" class="chart-bins" min="2" max="20" step="1"></label>
     </div>
-    <div class="chart-area"></div>`;
+    <div class="chart-area"></div>
+    <div class="chart-notes"></div>`;
   document.body.appendChild(dialog);
   const q = s => dialog.querySelector(s);
 
@@ -478,6 +481,86 @@
       let n = 0;
       for (let r = 1; r < sheet.rows; r++) if (typeof values[r][c] === "number") n++;
       if (n >= 2) out.push(c);
+    }
+    return out;
+  }
+  // A boxplot as the lab teaches it: the box from Q1 to Q3 with the median,
+  // whiskers to the furthest values inside 1.5 x IQR, and anything beyond them
+  // drawn as a point named by its ID, so the student sees which row it is.
+  function boxStats(points) {
+    const xs = points.map(p => p.v);
+    const q1 = E.quantile(xs, 0.25), med = E.quantile(xs, 0.5), q3 = E.quantile(xs, 0.75);
+    const iqr = q3 - q1, lo = q1 - 1.5 * iqr, hi = q3 + 1.5 * iqr;
+    const inside = xs.filter(x => x >= lo && x <= hi);
+    return {
+      n: xs.length, min: Math.min(...xs), max: Math.max(...xs), q1, med, q3, iqr, lo, hi,
+      wlo: Math.min(...inside), whi: Math.max(...inside),
+      out: points.filter(p => p.v < lo || p.v > hi),
+    };
+  }
+  function svgBox(title, groups, yLabel) {
+    const W = 720, H = 380, L = 64, R = 24, T = 40, B = 46;
+    const all = groups.flatMap(g => g.points.map(p => p.v));
+    let min = Math.min(...all), max = Math.max(...all);
+    if (min === max) { min -= 1; max += 1; }
+    const step = niceStep(max - min);
+    const bottom = Math.floor(min / step) * step, top = Math.ceil(max / step) * step;
+    const ih = H - T - B, iw = W - L - R;
+    const y = v => T + ih - ((v - bottom) / (top - bottom)) * ih;
+    const slot = iw / groups.length;
+    const parts = [`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${escapeHtml(title)}">`,
+      `<rect width="${W}" height="${H}" fill="#fff"/>`,
+      `<text x="${W / 2}" y="22" text-anchor="middle" font-size="16" font-weight="600" fill="#1F4E79">${escapeHtml(title)}</text>`];
+    for (let v = bottom; v <= top + 1e-9; v += step) {
+      parts.push(`<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="#e3e3e3"/>`,
+        `<text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="#404040">${E.display(Math.round(v * 1e6) / 1e6)}</text>`);
+    }
+    parts.push(`<text transform="translate(16 ${T + ih / 2}) rotate(-90)" text-anchor="middle" font-size="12" fill="#404040">${escapeHtml(yLabel)}</text>`);
+    groups.forEach((g, i) => {
+      const s = g.stats, cx = L + slot * i + slot / 2, bw = Math.min(110, slot * 0.45);
+      const x1 = cx - bw / 2, x2 = cx + bw / 2;
+      parts.push(
+        `<line x1="${cx}" x2="${cx}" y1="${y(s.whi)}" y2="${y(s.q3)}" stroke="#1F4E79" stroke-width="1.5"/>`,
+        `<line x1="${cx}" x2="${cx}" y1="${y(s.q1)}" y2="${y(s.wlo)}" stroke="#1F4E79" stroke-width="1.5"/>`,
+        `<line x1="${cx - bw / 4}" x2="${cx + bw / 4}" y1="${y(s.whi)}" y2="${y(s.whi)}" stroke="#1F4E79" stroke-width="1.5"/>`,
+        `<line x1="${cx - bw / 4}" x2="${cx + bw / 4}" y1="${y(s.wlo)}" y2="${y(s.wlo)}" stroke="#1F4E79" stroke-width="1.5"/>`,
+        `<rect x="${x1}" y="${y(s.q3)}" width="${bw}" height="${Math.max(1, y(s.q1) - y(s.q3))}" fill="#DCE8F4" stroke="#1F4E79" stroke-width="1.5"/>`,
+        `<line x1="${x1}" x2="${x2}" y1="${y(s.med)}" y2="${y(s.med)}" stroke="#B00020" stroke-width="2.5"/>`);
+      for (const o of s.out) {
+        parts.push(`<circle cx="${cx}" cy="${y(o.v)}" r="4.5" fill="#fff" stroke="#B00020" stroke-width="2"/>`,
+          `<text x="${cx + 9}" y="${y(o.v) + 4}" font-size="11" fill="#B00020">${escapeHtml(o.label)} (${E.display(o.v)})</text>`);
+      }
+      parts.push(`<text x="${cx}" y="${H - B + 20}" text-anchor="middle" font-size="12" fill="#404040">${escapeHtml(g.name)} (n = ${s.n})</text>`);
+    });
+    parts.push(`<line x1="${L}" x2="${W - R}" y1="${T + ih}" y2="${T + ih}" stroke="#404040"/></svg>`);
+    return parts.join("");
+  }
+  function boxTable(groups) {
+    const d = v => E.display(Math.round(v * 1e6) / 1e6);
+    const rows = [["", ...groups.map(g => escapeHtml(g.name))],
+      ["Ελάχιστο", ...groups.map(g => d(g.stats.min))],
+      ["Q1 (1ο τεταρτημόριο)", ...groups.map(g => d(g.stats.q1))],
+      ["Διάμεσος", ...groups.map(g => d(g.stats.med))],
+      ["Q3 (3ο τεταρτημόριο)", ...groups.map(g => d(g.stats.q3))],
+      ["Μέγιστο", ...groups.map(g => d(g.stats.max))],
+      ["IQR = Q3 - Q1", ...groups.map(g => d(g.stats.iqr))],
+      ["Όρια (Q1 - 1,5·IQR, Q3 + 1,5·IQR)", ...groups.map(g => d(g.stats.lo) + " έως " + d(g.stats.hi))],
+      ["Ακραίες τιμές", ...groups.map(g => g.stats.out.length ? g.stats.out.map(o => escapeHtml(o.label) + " (" + d(o.v) + ")").join(", ") : "καμία")]];
+    return "<table class='box-stats'>" + rows.map((r, i) => "<tr>" + r.map(c => (i === 0 ? `<th>${c}</th>` : `<td>${c}</td>`)).join("") + "</tr>").join("") + "</table>";
+  }
+  function categoryColumns(exclude) {
+    const out = [];
+    for (let c = 0; c < sheet.cols; c++) {
+      if (c === exclude) continue;
+      const seen = new Set();
+      let text = 0;
+      for (let r = 1; r < sheet.rows; r++) {
+        const v = values[r][c];
+        if (v === null || v === "") continue;
+        if (typeof v === "string") text++;
+        seen.add(E.display(v));
+      }
+      if (text && seen.size >= 2 && seen.size <= 8) out.push(c);
     }
     return out;
   }
@@ -495,6 +578,32 @@
     const c = Number(q(".chart-col").value);
     const kind = dialog.querySelector("input[name=chart-kind]:checked").value;
     q(".chart-bins-label").hidden = kind !== "hist";
+    q(".chart-group-label").hidden = kind !== "box";
+    q(".chart-notes").innerHTML = "";
+    if (kind === "box") {
+      const select = q(".chart-group");
+      const keep = select.value;
+      const cats = categoryColumns(c);
+      select.innerHTML = "<option value=''>Χωρίς ομάδες</option>" +
+        cats.map(k => `<option value="${k}">${E.colName(k)} · ${escapeHtml(E.display(values[0][k]) || "")}</option>`).join("");
+      if (cats.map(String).includes(keep)) select.value = keep;
+      const g = select.value === "" ? null : Number(select.value);
+      const buckets = new Map();
+      for (let r = 1; r < sheet.rows; r++) {
+        const v = values[r][c];
+        if (typeof v !== "number") continue;
+        const name = g === null ? (E.display(values[0][c]) || E.colName(c)) : (E.display(values[r][g]) || "(κενό)");
+        if (!buckets.has(name)) buckets.set(name, []);
+        buckets.get(name).push({ v, label: E.display(values[r][0]) || String(r + 1) });
+      }
+      const groups = [...buckets.entries()].filter(([, pts]) => pts.length).map(([name, points]) => ({ name, points, stats: boxStats(points) }));
+      if (!groups.length) { q(".chart-area").innerHTML = ""; return; }
+      const label = E.display(values[0][c]) || E.colName(c);
+      q(".chart-area").innerHTML = svgBox(label + (g === null ? "" : " ανά " + (E.display(values[0][g]) || E.colName(g))), groups, label);
+      q(".chart-notes").innerHTML = boxTable(groups) +
+        "<p class='box-note'>Τεταρτημόρια όπως η <code>QUARTILE.INC</code> του Excel. Ακραία είναι η τιμή έξω από τα όρια· σημαίνει «έλεγξέ με», όχι «διάγραψέ με».</p>";
+      return;
+    }
     const points = [];
     for (let r = 1; r < sheet.rows; r++) {
       const v = values[r][c];
@@ -566,6 +675,7 @@
   }
   q(".chart-col").addEventListener("change", drawChart);
   q(".chart-bins").addEventListener("change", drawChart);
+  q(".chart-group").addEventListener("change", drawChart);
   dialog.querySelectorAll("input[name=chart-kind]").forEach(r => r.addEventListener("change", drawChart));
   q(".chart-close").addEventListener("click", () => dialog.close());
   q(".chart-png").addEventListener("click", chartPng);
