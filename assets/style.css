@@ -28,6 +28,7 @@ a { color: var(--mid); }
 hr { border: 0; border-top: 1px solid #ccc; margin: 1.5rem 0; }
 blockquote { margin: 1rem 0; padding: 4px 14px; border-left: 3px solid var(--mid); background: var(--row); }
 code { background: var(--row); padding: 0 3px; border-radius: 3px; }
+th code { background: rgba(255, 255, 255, 0.2); color: #fff; }
 img { max-width: 100%; height: auto; }
 table { border-collapse: collapse; width: 100%; margin: 1rem 0; display: block; overflow-x: auto; }
 th { background: var(--dark); color: #fff; text-align: left; }
