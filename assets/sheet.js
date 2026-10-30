@@ -19,6 +19,8 @@
     <div class="sheet-bar">
       <strong class="sheet-title"></strong>
       <span class="sheet-actions">
+        <button type="button" data-act="undo" title="Αναίρεση της τελευταίας αλλαγής (Ctrl+Z)" aria-label="Αναίρεση" disabled>↶</button>
+        <button type="button" data-act="redo" title="Επανάληψη της αλλαγής που αναιρέθηκε (Ctrl+Y)" aria-label="Επανάληψη" disabled>↷</button>
         <button type="button" data-act="fill" title="Αντιγράφει τον τύπο του επιλεγμένου κελιού προς τα κάτω (Ctrl+D)">Συμπλήρωση προς τα κάτω</button>
         <button type="button" data-act="addcol">+ Στήλη</button>
         <button type="button" data-act="addrow">+ Γραμμή</button>
@@ -40,7 +42,8 @@
       <code>,</code> ή <code>;</code>. Αν το πληκτρολόγιο είναι στα ελληνικά, ο τύπος διαβάζεται κανονικά.
       Όσο γράφετε τύπο, ένα κλικ σε κελί (ή σύρσιμο σε περιοχή) βάζει τη διεύθυνσή του.</p>
       <p>Πλήκτρα: βέλη για μετακίνηση, Enter ή F2 για επεξεργασία, Delete για καθάρισμα,
-      Ctrl+C / Ctrl+V για αντιγραφή και επικόλληση (οι τύποι προσαρμόζονται), Ctrl+D για συμπλήρωση προς τα κάτω.
+      Ctrl+C / Ctrl+V για αντιγραφή και επικόλληση (οι τύποι προσαρμόζονται), Ctrl+D για συμπλήρωση προς τα κάτω,
+      Ctrl+Z για αναίρεση και Ctrl+Y για επανάληψη (και με τα κουμπιά ↶ ↷).
       Το <code>$</code> κρατά σταθερή μια στήλη ή γραμμή (<code>$D$2</code>).</p>
       <p>Το μικρό τετράγωνο κάτω δεξιά στην επιλογή συμπληρώνει όταν το σύρετε (κάτω ή δεξιά)· με διπλό κλικ
       συμπληρώνει ως το τέλος των δεδομένων. Δύο αριθμοί στη σειρά (1, 2) συνεχίζουν ως ακολουθία.
@@ -83,8 +86,26 @@
   let clip = null;    // {r, c, cells}: what Ctrl+C took, so a paste can move formulas
   let fillTo = null;  // {r, c}: where a drag of the fill handle has reached
   let downAt = null;  // where the button went down: a redraw under a still pointer is not a drag
+  // Undo keeps whole copies of the cells. Every change ends in save(), so save()
+  // is where the state before it is taken; the data file is small enough that a
+  // copy per change costs nothing. Kept for this visit only, as Excel does.
+  const UNDO_LIMIT = 100;
+  let undo = [];
+  let redo = [];
+  let saved = null;   // the cells as of the last save, as JSON: what an undo returns to
 
   function save() {
+    const cells = JSON.stringify(sheet.cells);
+    if (saved !== null && cells !== saved) {
+      undo.push(saved);
+      if (undo.length > UNDO_LIMIT) undo.shift();
+      redo = [];
+    }
+    saved = cells;
+    syncUndo();
+    store();
+  }
+  function store() {
     try {
       localStorage.setItem(key, JSON.stringify({ version: cfg.version, cells: sheet.cells, log, frozen }));
     } catch (e) { /* storage refused: the sheet still works for this visit */ }
@@ -100,6 +121,42 @@
       }
     } catch (e) { /* unreadable draft: start from the file */ }
     return false;
+  }
+
+  function syncUndo() {
+    $("[data-act=undo]").disabled = !undo.length;
+    $("[data-act=redo]").disabled = !redo.length;
+  }
+  // Steps one change back (or forward) and selects the cells it touched, so the
+  // student sees what came back. A row or column added or deleted changes the
+  // shape, and then the selection only stays inside the sheet.
+  function step(from, to, kind) {
+    if (editor) commit();
+    if (!from.length) { say(kind === "undo" ? "Δεν υπάρχει αλλαγή για αναίρεση." : "Δεν υπάρχει αλλαγή για επανάληψη."); return; }
+    const before = sheet.cells;
+    const target = JSON.parse(from.pop());
+    to.push(saved);
+    sheet = new E.Sheet(target);
+    saved = JSON.stringify(sheet.cells);
+    let b = null;
+    if (before.length === sheet.rows && before[0].length === sheet.cols) {
+      for (let r = 0; r < sheet.rows; r++) for (let c = 0; c < sheet.cols; c++) {
+        if (before[r][c] === sheet.cells[r][c]) continue;
+        b = b ? { r1: Math.min(b.r1, r), r2: Math.max(b.r2, r), c1: Math.min(b.c1, c), c2: Math.max(b.c2, c) }
+              : { r1: r, r2: r, c1: c, c2: c };
+      }
+    }
+    if (b) sel = { r: b.r1, c: b.c1, r2: b.r2, c2: b.c2 };
+    else {
+      const r = Math.min(sel.r, sheet.rows - 1), c = Math.min(sel.c, sheet.cols - 1);
+      sel = { r, c, r2: r, c2: c };
+    }
+    note({ kind });
+    syncUndo();
+    store();
+    render();
+    say(kind === "undo" ? "Αναιρέθηκε η τελευταία αλλαγή." : "Έγινε ξανά η αλλαγή.");
+    grid.focus({ preventScroll: true });
   }
 
   function say(text) { statusLine.textContent = text || ""; }
@@ -209,10 +266,12 @@
     input.setSelectionRange(input.value.length, input.value.length);
     bar.value = input.value;
     input.addEventListener("input", () => { bar.value = input.value; editor && (editor.pick = null); });
+    // stopped here: the grid's own keydown would otherwise read the same Enter
+    // after the commit and open the next cell for editing
     input.addEventListener("keydown", e => {
-      if (e.key === "Enter") { e.preventDefault(); commit(); move(e.shiftKey ? -1 : 1, 0); }
-      else if (e.key === "Tab") { e.preventDefault(); commit(); move(0, e.shiftKey ? -1 : 1); }
-      else if (e.key === "Escape") { e.preventDefault(); cancel(); }
+      if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); commit(); move(e.shiftKey ? -1 : 1, 0); }
+      else if (e.key === "Tab") { e.preventDefault(); e.stopPropagation(); commit(); move(0, e.shiftKey ? -1 : 1); }
+      else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); cancel(); }
     });
     input.addEventListener("blur", () => setTimeout(() => {
       if (editor && editor.input === input && document.activeElement !== bar && !dragging) commit();
@@ -449,6 +508,8 @@
       else if (e.kind === "addcol") li.textContent = `${e.at} · νέα στήλη ${e.cell}`;
       else if (e.kind === "delcol") li.textContent = `${e.at} · διαγραφή στήλης ${e.cols}`;
       else if (e.kind === "addrow") li.textContent = `${e.at} · νέα γραμμή ${e.cell}`;
+      else if (e.kind === "undo") li.textContent = `${e.at} · αναίρεση της προηγούμενης αλλαγής`;
+      else if (e.kind === "redo") li.textContent = `${e.at} · επανάληψη της αλλαγής που αναιρέθηκε`;
       ol.appendChild(li);
     }
   }
@@ -819,6 +880,16 @@
     else if (ctrl && (e.key === "a" || e.key === "A")) { e.preventDefault(); sel = { r: 0, c: 0, r2: sheet.rows - 1, c2: sheet.cols - 1 }; render(); }
     else if (!ctrl && !e.altKey && e.key.length === 1) { e.preventDefault(); startEdit(e.key); }
   });
+  // Undo answers anywhere in the panel, a toolbar button just clicked included,
+  // except in a text box, where Ctrl+Z belongs to the text being typed. By
+  // physical key as well, so a Greek layout (ζ, υ) undoes like a Latin one.
+  dock.addEventListener("keydown", e => {
+    if (!(e.ctrlKey || e.metaKey) || e.altKey || e.target.tagName === "INPUT") return;
+    const z = e.code === "KeyZ" || e.key === "z" || e.key === "Z";
+    const y = e.code === "KeyY" || e.key === "y" || e.key === "Y";
+    if (z && !e.shiftKey) { e.preventDefault(); step(undo, redo, "undo"); }
+    else if (y || (z && e.shiftKey)) { e.preventDefault(); step(redo, undo, "redo"); }
+  });
   grid.addEventListener("copy", e => { if (!editor) copy(e); });
   grid.addEventListener("paste", e => { if (!editor) paste(e); });
   grid.addEventListener("cut", e => { if (!editor) { copy(e); clearSelection(); } });
@@ -829,6 +900,7 @@
   menu.setAttribute("role", "menu");
   menu.hidden = true;
   const ITEMS = [
+    ["undo", "Αναίρεση", "Ctrl+Z"], ["redo", "Επανάληψη", "Ctrl+Y"], null,
     ["cut", "Αποκοπή", "Ctrl+X"], ["copy", "Αντιγραφή", "Ctrl+C"], ["paste", "Επικόλληση", "Ctrl+V"], null,
     ["rowAbove", "Εισαγωγή γραμμής από πάνω"], ["rowBelow", "Εισαγωγή γραμμής από κάτω"],
     ["colLeft", "Εισαγωγή στήλης αριστερά"], ["colRight", "Εισαγωγή στήλης δεξιά"], null,
@@ -851,6 +923,8 @@
       if (!inSel(r, c)) { sel = { r, c, r2: r, c2: c }; render(); }
     }
     menu.querySelector("[data-menu=paste]").disabled = !clip && !(navigator.clipboard && navigator.clipboard.readText);
+    menu.querySelector("[data-menu=undo]").disabled = !undo.length;
+    menu.querySelector("[data-menu=redo]").disabled = !redo.length;
     menu.hidden = false;
     const w = menu.offsetWidth, h = menu.offsetHeight;
     menu.style.left = Math.min(e.clientX, window.innerWidth - w - 4) + "px";
@@ -863,6 +937,8 @@
     closeMenu();
     const b = box();
     switch (btn.dataset.menu) {
+      case "undo": step(undo, redo, "undo"); break;
+      case "redo": step(redo, undo, "redo"); break;
       case "cut": copy(); clearSelection(); break;
       case "copy": copy(); break;
       case "paste": {
@@ -908,6 +984,8 @@
     if (!btn) return;
     if (editor) commit();
     switch (btn.dataset.act) {
+      case "undo": step(undo, redo, "undo"); break;
+      case "redo": step(redo, undo, "redo"); break;
       case "fill": fillDown(); break;
       case "addcol": insertColumn(box().c2 + 1); break;
       case "addrow": insertRow(box().r2 + 1); break;
@@ -925,7 +1003,7 @@
         break;
       }
       case "reset":
-        if (!confirm("Επαναφορά στο αρχικό αρχείο; Οι αλλαγές και το ιστορικό τους θα χαθούν.")) break;
+        if (!confirm("Επαναφορά στο αρχικό αρχείο; Το ιστορικό των αλλαγών θα χαθεί (η Αναίρεση φέρνει πίσω τα δεδομένα).")) break;
         sheet = new E.Sheet(pristine); log = []; frozen = false;
         sel = { r: 1, c: 0, r2: 1, c2: 0 };
         save(); render(); if (!logBox.hidden) renderLog();
@@ -960,6 +1038,7 @@
       if (!res.ok) throw new Error(res.status);
       pristine = E.parseCsv(await res.text());
       if (!restore()) sheet = new E.Sheet(pristine);
+      saved = JSON.stringify(sheet.cells);
       toggle.disabled = false;
       let reopen = false;
       try { reopen = sessionStorage.getItem(key + ":open") === "1"; } catch (e) { /* ignore */ }
