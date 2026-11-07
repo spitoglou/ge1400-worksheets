@@ -108,6 +108,8 @@ dialog#material::backdrop { background: rgba(0, 0, 0, 0.55); }
 figure.screencast { margin: 1rem 0; }
 figure.screencast video { width: 100%; height: auto; background: #000; border-radius: 4px; }
 figure.screencast figcaption { font-size: 0.9rem; color: var(--grey); margin-top: 6px; }
+details.screencast { margin: 0.6rem 0 1rem; }
+details.screencast summary { cursor: pointer; font-weight: 600; color: var(--dark); }
 
 @media (max-width: 600px) {
   .ws-line { width: 100% !important; display: block; margin: 4px 0; }
