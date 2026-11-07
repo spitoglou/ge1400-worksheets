@@ -10,7 +10,7 @@
   const key = "worksheet:" + cfg.slug + ":lab" + cfg.lab;
   const FONT_URL = "assets/NotoSans-Regular.ttf";
 
-  const inputs = () => Array.from(form.querySelectorAll("input[name], textarea[name]"));
+  const inputs = () => Array.from(form.querySelectorAll("input[name], textarea[name], select[name]"));
 
   function say(text, kind) {
     status.textContent = text;
@@ -101,7 +101,9 @@
       const font = await doc.embedFont(fontBytes, { subset: true });
       const pdfForm = doc.getForm();
       for (const [name, v] of Object.entries(values)) {
+        const el = form.querySelector(`[name="${name}"]`);
         if (v === true) pdfForm.getCheckBox(name).check();
+        else if (el && el.tagName === "SELECT") pdfForm.getDropdown(name).select(v);
         else pdfForm.getTextField(name).setText(v);
       }
       // Drawn here in a Greek font. Left to save(), pdf-lib would draw them in
@@ -123,7 +125,7 @@
     ev.target.value = "";
     if (!file) return;
     try {
-      const { PDFDocument, PDFTextField, PDFCheckBox } = PDFLib;
+      const { PDFDocument, PDFTextField, PDFCheckBox, PDFDropdown } = PDFLib;
       const doc = await PDFDocument.load(await file.arrayBuffer());
       const byName = new Map(doc.getForm().getFields().map(f => [f.getName(), f]));
       const ours = inputs().filter(el => byName.has(el.name));
@@ -136,6 +138,7 @@
         const f = byName.get(el.name);
         if (f instanceof PDFCheckBox) { if (f.isChecked()) values[el.name] = true; }
         else if (f instanceof PDFTextField) { const t = f.getText(); if (t) values[el.name] = t; }
+        else if (f instanceof PDFDropdown) { const s = f.getSelected()[0]; if (s) values[el.name] = s; }
       }
       apply(values);
       store();

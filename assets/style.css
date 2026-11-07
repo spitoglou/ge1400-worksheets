@@ -53,7 +53,7 @@ ul.contains-task-list, ul.task-list { list-style: none; padding-left: 1.2rem; }
 #status.ok { color: #1B7F3B; }
 .howto { font-size: 0.92rem; color: var(--grey); background: var(--row); padding: 10px 12px; border-radius: 4px; }
 
-.ws-line, .ws-cell, .ws-box {
+.ws-line, .ws-cell, .ws-box, .ws-choice {
   font: inherit; font-size: 0.95rem; color: #000;
   border: 1px solid var(--field-line); background: var(--field-fill);
   border-radius: 2px; padding: 3px 6px;
@@ -62,8 +62,9 @@ ul.contains-task-list, ul.task-list { list-style: none; padding-left: 1.2rem; }
 .ws-line.ws-wide { width: 100%; }
 .ws-cell { width: 100%; min-width: 8em; resize: vertical; }
 .ws-box { display: block; width: 100%; resize: vertical; margin: 4px 0 8px; }
+.ws-choice { width: 100%; min-width: 12em; padding: 4px; }
 .ws-tick { width: 1.1rem; height: 1.1rem; accent-color: var(--mid); vertical-align: middle; }
-.ws-line:focus, .ws-cell:focus, .ws-box:focus { outline: 2px solid var(--mid); outline-offset: 0; background: #fff; }
+.ws-line:focus, .ws-cell:focus, .ws-box:focus, .ws-choice:focus { outline: 2px solid var(--mid); outline-offset: 0; background: #fff; }
 ul.labs { padding-left: 1.2rem; }
 ul.labs li { margin: 10px 0; }
 ul.labs .lab-title { font-weight: 600; }
